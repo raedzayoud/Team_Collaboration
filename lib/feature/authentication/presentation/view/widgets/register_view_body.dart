@@ -19,6 +19,15 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
   String? errorMessage;
 
   @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    username.dispose();
+    phone.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [

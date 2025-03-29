@@ -1,6 +1,7 @@
 import 'package:collab_doc/feature/gemini/presentation/view/gemini_chat.dart';
 import 'package:collab_doc/feature/home/presentation/view/home.dart';
 import 'package:collab_doc/feature/home/presentation/view/widget/bottomNavigatorHome.dart';
+import 'package:collab_doc/feature/settings/presentation/view/settings.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreenView extends StatefulWidget {
@@ -24,12 +25,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     const Text('Contacts'),
     const Text('Contacts'),
     GeminiChat(),
-    TextButton(
-      child: const Text('Log Out'),
-      onPressed: () {
-        // AuthMethods().signOut();
-      },
-    ),
+    Settings()
   ];
   @override
   Widget build(BuildContext context) {
