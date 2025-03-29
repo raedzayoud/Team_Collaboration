@@ -38,6 +38,12 @@ dependencies:
   dartz: ^0.10.1
   flutter_gemini: ^3.0.0
   google_generative_ai: ^0.4.6
+  flutter_quill: ^11.2.0
+  url_launcher: ^6.3.1
+  quill_native_bridge: ^11.0.1
+  flutter_keyboard_visibility_temp_fork: ^0.1.5
+  shared_preferences: ^2.5.3
+  flutter_quill_extensions: ^11.0.0
 
 dev_dependencies:
   flutter_test:

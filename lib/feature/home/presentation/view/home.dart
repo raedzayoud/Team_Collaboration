@@ -10,7 +10,9 @@ class Home extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed("addDocument");
+          },
           child: Icon(Icons.add),
           backgroundColor: Colors.white,
         ),
