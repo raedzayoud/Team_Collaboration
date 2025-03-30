@@ -1,10 +1,13 @@
+import 'package:collab_doc/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';  // ✅ Import toolbar
+import 'package:flutter_quill/flutter_quill.dart'; 
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class AddDocumentPage extends StatefulWidget {
+  final String? initialContent;
+  const AddDocumentPage(this.initialContent);
   @override
   _AddDocumentPageState createState() => _AddDocumentPageState();
 }
@@ -16,38 +19,46 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
 
   // Save document to SharedPreferences
   Future<void> _saveDocument() async {
-    final prefs = await SharedPreferences.getInstance();
-    final jsonContent = jsonEncode(_controller.document.toDelta().toJson());
-    await prefs.setString('saved_document', jsonContent);
+    // Retrieve existing documents list or initialize an empty list
+    List<String> savedDocs =
+        sharedPreferences.getStringList('saved_documents') ?? [];
+
+    // Create a new document entry
+    final String jsonContent =
+        jsonEncode(_controller.document.toDelta().toJson());
+    final String documentId =
+        DateTime.now().millisecondsSinceEpoch.toString(); // Unique ID
+    final Map<String, String> newDoc = {
+      "id": documentId,
+      "content": jsonContent,
+    };
+
+    // Add the new document to the list
+    savedDocs.add(jsonEncode(newDoc));
+
+    // Save the updated list
+    await sharedPreferences.setStringList('saved_documents', savedDocs);
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Document saved locally!")),
+      SnackBar(content: Text("Document saved successfully!")),
     );
 
     Navigator.pop(context);
   }
 
-  // Load saved document from SharedPreferences
-  Future<void> _loadDocument() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? savedJson = prefs.getString('saved_document');
+  @override
+  void initState() {
+    super.initState();
 
-    if (savedJson != null) {
+    // Load the existing document if provided
+    if (widget.initialContent != null) {
       try {
-        final List<dynamic> deltaJson = jsonDecode(savedJson);
-        setState(() {
-          _controller.document = quill.Document.fromJson(deltaJson);
-        });
+        final List<dynamic> deltaJson = jsonDecode(widget.initialContent!);
+        _controller.document = quill.Document.fromJson(deltaJson);
       } catch (e) {
         print("Error loading document: $e");
       }
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadDocument();
   }
 
   @override
@@ -57,7 +68,9 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
       body: Column(
         children: [
           // Add the toolbox here
-          QuillSimpleToolbar(controller: _controller,),
+          QuillSimpleToolbar(
+            controller: _controller,
+          ),
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(8.0),
@@ -67,7 +80,7 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
                 scrollController: _scrollController,
                 config: quill.QuillEditorConfig(
                   readOnlyMouseCursor: SystemMouseCursors.basic,
-                 ),
+                ),
               ),
             ),
           ),

@@ -106,12 +106,23 @@ class Settings extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    ElevatedButton(onPressed: (){}, child: Text("Edit")),
-                    ElevatedButton(onPressed: (){}, child: Text("Logout")),
+                    MaterialButton(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onPressed: () {},
+                        child: Text("Edit")),
+                    MaterialButton(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onPressed: () {},
+                        child: Text("Logout")),
                   ],
                 )
               ],
