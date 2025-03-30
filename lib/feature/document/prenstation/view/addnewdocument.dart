@@ -1,8 +1,9 @@
+import 'package:collab_doc/feature/document/prenstation/view/widgets/buttons.dart';
+import 'package:collab_doc/feature/document/prenstation/view/widgets/cursordocument.dart';
 import 'package:collab_doc/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart'; 
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class AddDocumentPage extends StatefulWidget {
@@ -14,8 +15,6 @@ class AddDocumentPage extends StatefulWidget {
 
 class _AddDocumentPageState extends State<AddDocumentPage> {
   final quill.QuillController _controller = quill.QuillController.basic();
-  final FocusNode _focusNode = FocusNode();
-  final ScrollController _scrollController = ScrollController();
 
   // Save document to SharedPreferences
   Future<void> _saveDocument() async {
@@ -71,39 +70,11 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
           QuillSimpleToolbar(
             controller: _controller,
           ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: quill.QuillEditor(
-                controller: _controller,
-                focusNode: _focusNode,
-                scrollController: _scrollController,
-                config: quill.QuillEditorConfig(
-                  readOnlyMouseCursor: SystemMouseCursors.basic,
-                ),
-              ),
-            ),
-          ),
+          Cursordocument(controller: _controller,),
 
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.cancel),
-                  label: Text("Cancel"),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                ),
-                ElevatedButton.icon(
-                  onPressed: _saveDocument,
-                  icon: Icon(Icons.save),
-                  label: Text("Save"),
-                ),
-              ],
-            ),
-          ),
+          Buttons(
+            save: _saveDocument,
+          )
         ],
       ),
     );
