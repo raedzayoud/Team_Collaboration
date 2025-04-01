@@ -1,3 +1,4 @@
+import 'package:collab_doc/feature/chatroom/presentation/view/equipchat.dart';
 import 'package:collab_doc/feature/gemini/presentation/view/gemini_chat.dart';
 import 'package:collab_doc/feature/home/presentation/view/home.dart';
 import 'package:collab_doc/feature/home/presentation/view/widget/bottomNavigatorHome.dart';
@@ -23,7 +24,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   List<Widget> pages = [
     Home(),
     const Text('Contacts'),
-    const Text('Contacts'),
+    Equipchat(),
     GeminiChat(),
     Settings()
   ];
