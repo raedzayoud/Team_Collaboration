@@ -1,10 +1,7 @@
-import 'package:collab_doc/constant.dart';
-import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_button.dart';
 import 'package:collab_doc/feature/chatroom/presentation/view/widgets/apparchat.dart';
 import 'package:collab_doc/feature/chatroom/presentation/view/widgets/buttonsmettings.dart';
 import 'package:collab_doc/feature/chatroom/presentation/view/widgets/messages.dart';
 import 'package:collab_doc/feature/chatroom/presentation/view/widgets/textfieldmessage.dart';
-import 'package:collab_doc/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class Chatroom extends StatefulWidget {
