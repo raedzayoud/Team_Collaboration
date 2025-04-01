@@ -46,7 +46,9 @@ class teams extends StatelessWidget {
               )),
           Spacer(),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed("chat",arguments: id);
+            },
             icon: Icon(
               Icons.arrow_forward_ios,
               color: Colors.white,
