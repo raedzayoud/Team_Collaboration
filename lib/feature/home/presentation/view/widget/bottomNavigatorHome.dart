@@ -36,9 +36,9 @@ class Bottomnavigatorhome extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.smart_toy,
+            Icons.groups,
           ),
-          label: 'ChatBot',
+          label: 'Teams',
         ),
         BottomNavigationBarItem(
           icon: Icon(
