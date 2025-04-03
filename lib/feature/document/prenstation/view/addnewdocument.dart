@@ -23,9 +23,9 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
   String _wordSpoken = "";
 
   void startListening() async {
-    // if (!_speechEnalbled) {
-    //   return ;
-    // }
+    if (!_speechEnalbled) {
+      return;
+    }
     await speechToText.listen(onResult: onSpeechResult);
     setState(() {});
   }
@@ -98,6 +98,11 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
       try {
         final List<dynamic> deltaJson = jsonDecode(widget.initialContent!);
         _controller.document = quill.Document.fromJson(deltaJson);
+        // Set the cursor to the beginning or end of the document
+        _controller.updateSelection(
+          TextSelection.collapsed(offset: _controller.document.length),
+          ChangeSource.local,
+        );
       } catch (e) {
         print("Error loading document: $e");
       }
@@ -114,11 +119,17 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
       body: Column(
         children: [
           // Add the toolbox here
-          QuillSimpleToolbar(
-            controller: _controller,
-          ),
-          Cursordocument(
-            controller: _controller,
+          Expanded(
+            child: ListView(
+              children: [
+                QuillSimpleToolbar(
+                  controller: _controller,
+                ),
+                Cursordocument(
+                  controller: _controller,
+                ),
+              ],
+            ),
           ),
 
           Buttons(
@@ -126,37 +137,6 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
             stopListening: stopListening,
             speechToText: speechToText,
             save: _saveDocument,
-          ),
-          // Speech-to-Text Status Display
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Text(
-              speechToText.isListening
-                  ? "Listening..."
-                  : _speechEnalbled
-                      ? "Tap the microphone to start listening"
-                      : "Speech not available",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-          // Display Recognized Speech
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Result: ",
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
-                ),
-                Expanded(
-                  child: Text(
-                    _wordSpoken,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),
