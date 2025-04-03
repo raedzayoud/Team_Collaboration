@@ -1,4 +1,3 @@
-import 'package:collab_doc/feature/authentication/presentation/view/login_view.dart';
 import 'package:collab_doc/feature/document/prenstation/manager/cubit/document_cubit.dart';
 import 'package:collab_doc/feature/home/presentation/view/home_screen_view.dart';
 import 'package:collab_doc/utils/router.dart';

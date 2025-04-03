@@ -1,3 +1,5 @@
+import 'package:collab_doc/teams/presentation/view/widgets/buildteamownrow.dart';
+import 'package:collab_doc/teams/presentation/view/widgets/buildteamrow.dart';
 import 'package:flutter/material.dart';
 
 class Teamsmember extends StatelessWidget {
@@ -41,52 +43,48 @@ class Teamsmember extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: ListView(
                 children: [
-                  _buildTeamRow("Team 1", "8 members", "Member"),
+                  Buildteamrow(
+                      teamName: "Team 1", members: "8 members", role: "Member"),
                   Divider(),
-                  _buildTeamRow("Team 2", "12 members", "Admin"),
+                  Buildteamrow(
+                      teamName: "Team 2", members: "8 members", role: "Admin"),
                   Divider(),
-                  _buildTeamRow("Team 3", "5 members", "Member"),
+                  Buildteamrow(
+                      teamName: "Team 3", members: "8 members", role: "Member"),
                 ],
               ),
             ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: ListView(
                 children: [
-                  Icon(Icons.group, size: 80, color: Colors.grey),
-                  SizedBox(height: 10),
-                  Text("No Teams Found",
-                      style: TextStyle(fontSize: 18, color: Colors.grey)),
+                  BuildteamOwnRow(
+                      teamName: "Team 1", members: "8 members", role: "Owner"),
+                  Divider(),
+                  BuildteamOwnRow(
+                      teamName: "Team 1", members: "8 members", role: "Owner"),
+                  Divider(),
+                  BuildteamOwnRow (
+                      teamName: "Team 1", members: "8 members", role: "Owner"),
+                  SizedBox(height: 10,),
+                  MaterialButton(
+                    padding: EdgeInsets.all(14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)
+                    ),
+                    color: Colors.black,
+                    onPressed: (){},child: Text("Create New Team",style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold
+                  ),),)
+                  
                 ],
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildTeamRow(String teamName, String members, String role) {
-    return Row(
-      children: [
-        Container(
-          height: 40,
-          width: 40,
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Icon(Icons.group_outlined, color: Colors.black),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: ListTile(
-            title: Text(teamName, style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(members),
-          ),
-        ),
-        Text(role, style: TextStyle(fontWeight: FontWeight.w400)),
-      ],
     );
   }
 }
