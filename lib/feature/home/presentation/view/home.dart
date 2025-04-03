@@ -4,6 +4,7 @@ import 'package:collab_doc/feature/home/presentation/view/widget/apparhome.dart'
 import 'package:collab_doc/feature/home/presentation/view/widget/texthome.dart';
 import 'package:collab_doc/main.dart';
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,6 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Map<String, String>> documents = [];
+
   @override
   void initState() {
     _loadDocuments();
@@ -68,11 +70,11 @@ class _HomeState extends State<Home> {
             documents.isEmpty
                 ? Center(child: Text("No documents saved."))
                 : Expanded(
-                  child: ListView.builder(
+                    child: ListView.builder(
                       itemCount: documents.length,
                       itemBuilder: (context, index) {
                         final doc = documents[index];
-                  
+
                         return Card(
                           color: Colors.white,
                           child: ListTile(
@@ -87,11 +89,12 @@ class _HomeState extends State<Home> {
                         );
                       },
                     ),
-                ),
+                  ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
         child: Icon(Icons.add),
         onPressed: () => Navigator.push(
           context,
@@ -101,7 +104,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-
-
-

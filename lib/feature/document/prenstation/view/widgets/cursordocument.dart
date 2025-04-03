@@ -11,16 +11,20 @@ class Cursordocument extends StatelessWidget {
     final ScrollController _scrollController = ScrollController();
 
     return Expanded(
-      child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: quill.QuillEditor(
-          controller: controller,
-          focusNode: _focusNode,
-          scrollController: _scrollController,
-          config: quill.QuillEditorConfig(
-            readOnlyMouseCursor: SystemMouseCursors.basic,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: quill.QuillEditor(
+              controller: controller,
+              focusNode: _focusNode,
+              scrollController: _scrollController,
+              config: quill.QuillEditorConfig(
+                readOnlyMouseCursor: SystemMouseCursors.basic,
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
