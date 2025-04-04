@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           // Add any other locales you want to support
         ],
         debugShowCheckedModeBanner: false,
-        home: Test(),
+        home: HomeScreenView(),
         routes: AppRouter.pageRoutes,
       ),
     );

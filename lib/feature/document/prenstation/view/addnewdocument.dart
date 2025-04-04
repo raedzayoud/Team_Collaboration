@@ -18,6 +18,7 @@ class AddDocumentPage extends StatefulWidget {
 class _AddDocumentPageState extends State<AddDocumentPage> {
   final quill.QuillController _controller = quill.QuillController.basic();
   stt.SpeechToText speechToText = stt.SpeechToText();
+  TextEditingController _textEditingController = TextEditingController();
 
   bool _speechEnalbled = false;
   String _wordSpoken = "";
@@ -115,20 +116,87 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
       appBar: AppBar(
         title: Text("New Document"),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.content_cut_outlined),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(
+                        "Resume Text Summarizer",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      content: TextFormField(
+                        readOnly: true,
+                        /**controller: _textEditingController..text = _controller.document.toPlainText(),
+                         *  This is equivalent to:
+                         * _textEditingController.text = _controller.document.toPlainText();
+                            controller: _textEditingController;
+                        */
+                        controller: _textEditingController
+                          ..text = _controller.document.toPlainText(),
+                        scrollPadding: EdgeInsets.all(20),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                      actions: [
+                        MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          color: Colors.white,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Cancel",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          color: Colors.deepPurple,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Apply Resume",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        )
+                      ],
+                    );
+                  });
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
           // Add the toolbox here
+          QuillSimpleToolbar(
+            controller: _controller,
+          ),
           Expanded(
-            child: ListView(
-              children: [
-                QuillSimpleToolbar(
-                  controller: _controller,
-                ),
-                Cursordocument(
-                  controller: _controller,
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Cursordocument(
+                controller: _controller,
+              ),
             ),
           ),
 
