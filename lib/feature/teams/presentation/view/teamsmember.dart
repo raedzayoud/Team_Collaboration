@@ -1,5 +1,5 @@
-import 'package:collab_doc/teams/presentation/view/widgets/buildteamownrow.dart';
-import 'package:collab_doc/teams/presentation/view/widgets/buildteamrow.dart';
+import 'package:collab_doc/feature/teams/presentation/view/widgets/buildteamownrow.dart';
+import 'package:collab_doc/feature/teams/presentation/view/widgets/buildteamrow.dart';
 import 'package:flutter/material.dart';
 
 class Teamsmember extends StatelessWidget {

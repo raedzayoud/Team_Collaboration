@@ -4,8 +4,8 @@ import 'package:collab_doc/feature/authentication/presentation/view/widgets/cust
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_text_field.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_title.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/signup.dart';
-import 'package:collab_doc/utils/assets.dart';
-import 'package:collab_doc/utils/function/validator.dart';
+import 'package:collab_doc/core/utils/assets.dart';
+import 'package:collab_doc/core/utils/function/validator.dart';
 import 'package:flutter/material.dart';
 
 class content_body_login extends StatelessWidget {

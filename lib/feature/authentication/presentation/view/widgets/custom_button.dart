@@ -1,5 +1,5 @@
 import 'package:collab_doc/constant.dart';
-import 'package:collab_doc/utils/assets.dart';
+import 'package:collab_doc/core/utils/assets.dart';
 import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final String text;

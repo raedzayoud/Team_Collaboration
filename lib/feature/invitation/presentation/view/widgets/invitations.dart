@@ -1,6 +1,6 @@
 
 import 'package:collab_doc/constant.dart';
-import 'package:collab_doc/utils/responsive.dart';
+import 'package:collab_doc/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class invitations extends StatelessWidget {

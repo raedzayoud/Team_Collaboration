@@ -1,7 +1,9 @@
+import 'package:collab_doc/feature/document/data/repos/document_repos.dart';
+import 'package:collab_doc/feature/document/data/repos/document_repos_impl.dart';
 import 'package:collab_doc/feature/document/prenstation/manager/cubit/document_cubit.dart';
 import 'package:collab_doc/feature/home/presentation/view/home_screen_view.dart';
 import 'package:collab_doc/test.dart';
-import 'package:collab_doc/utils/router.dart';
+import 'package:collab_doc/core/utils/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context)=>DocumentCubit()),
+        BlocProvider(create: (context)=>DocumentCubit(DocumentReposImpl())),
       ],
       child: MaterialApp(
         localizationsDelegates: [

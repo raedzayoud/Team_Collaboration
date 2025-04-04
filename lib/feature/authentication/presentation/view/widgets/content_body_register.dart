@@ -4,8 +4,8 @@ import 'package:collab_doc/feature/authentication/presentation/view/widgets/cust
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_image.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_text_field.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_title.dart';
-import 'package:collab_doc/utils/assets.dart';
-import 'package:collab_doc/utils/function/validator.dart';
+import 'package:collab_doc/core/utils/assets.dart';
+import 'package:collab_doc/core/utils/function/validator.dart';
 
 class content_body_register extends StatelessWidget {
   const content_body_register({
