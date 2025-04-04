@@ -1,7 +1,12 @@
+import 'package:collab_doc/core/widgets/custom_error.dart';
+import 'package:collab_doc/core/widgets/custom_loading.dart';
+import 'package:collab_doc/feature/document/prenstation/manager/cubit/document_cubit.dart';
 import 'package:collab_doc/feature/document/prenstation/view/widgets/buttons.dart';
 import 'package:collab_doc/feature/document/prenstation/view/widgets/cursordocument.dart';
+import 'package:collab_doc/feature/document/prenstation/view/widgets/showdialog_scissors.dart';
 import 'package:collab_doc/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'dart:convert';
@@ -16,7 +21,7 @@ class AddDocumentPage extends StatefulWidget {
 }
 
 class _AddDocumentPageState extends State<AddDocumentPage> {
-  final quill.QuillController _controller = quill.QuillController.basic();
+  quill.QuillController _controller = quill.QuillController.basic();
   stt.SpeechToText speechToText = stt.SpeechToText();
   TextEditingController _textEditingController = TextEditingController();
 
@@ -120,93 +125,69 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
           IconButton(
             icon: Icon(Icons.content_cut_outlined),
             onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text(
-                        "Resume Text Summarizer",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+              showDialogScissors(
+                context: context,
+                textEditingController: _textEditingController,
+                controller: _controller,
+                onPressed: () {
+                  if (_controller.document.toPlainText().trim().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Please enter text to summarize."),
                       ),
-                      content: TextFormField(
-                        readOnly: true,
-                        /**controller: _textEditingController..text = _controller.document.toPlainText(),
-                         *  This is equivalent to:
-                         * _textEditingController.text = _controller.document.toPlainText();
-                            controller: _textEditingController;
-                        */
-                        controller: _textEditingController
-                          ..text = _controller.document.toPlainText(),
-                        scrollPadding: EdgeInsets.all(20),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                      actions: [
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          color: Colors.white,
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text("Cancel",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          color: Colors.deepPurple,
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text("Apply Resume",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        )
-                      ],
                     );
-                  });
+                    Navigator.of(context).pop();
+                    return;
+                  }
+                  BlocProvider.of<DocumentCubit>(context).summarizeText(
+                    _controller.document.toPlainText(),
+                  );
+                  Navigator.of(context).pop();
+                },
+              );
             },
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Add the toolbox here
-          QuillSimpleToolbar(
-            controller: _controller,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Cursordocument(
-                controller: _controller,
-              ),
-            ),
-          ),
-
-          Buttons(
-            startListening: startListening,
-            stopListening: stopListening,
-            speechToText: speechToText,
-            save: _saveDocument,
-          ),
-        ],
+      body: BlocListener<DocumentCubit, DocumentState>(
+        listener: (context, state) {
+          if (state is DocumentSuccess) {
+            _controller = quill.QuillController(
+              document: quill.Document()..insert(0, state.summary),
+              selection: const TextSelection.collapsed(offset: 0),
+            );
+          }
+        },
+        child: BlocBuilder<DocumentCubit, DocumentState>(
+          builder: (context, state) {
+            if (state is DocumentLoading) {
+              return CustomLoading();
+            } else if (state is DocumentFailure) {
+              return CustomError(errorMessage: state.errorMessage);
+            } else {
+              return Column(
+                children: [
+                  QuillSimpleToolbar(
+                    controller: _controller,
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Cursordocument(
+                        controller: _controller,
+                      ),
+                    ),
+                  ),
+                  Buttons(
+                    startListening: startListening,
+                    stopListening: stopListening,
+                    speechToText: speechToText,
+                    save: _saveDocument,
+                  ),
+                ],
+              );
+            }
+          },
+        ),
       ),
     );
   }
