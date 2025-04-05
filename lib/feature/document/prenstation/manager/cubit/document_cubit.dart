@@ -18,7 +18,7 @@ class DocumentCubit extends Cubit<DocumentState> {
       print('Error: $error');
       emit(DocumentFailure(errorMessage: error.toString()));
       // Delay before resetting to the initial state
-      await Future.delayed(Duration(seconds: 4));
+      await Future.delayed(Duration(seconds: 3));
       emit(DocumentInitial());
     }
   }

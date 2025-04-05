@@ -160,7 +160,6 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
               },
             ),
           ),
-          Spacer(),
           Buttons(
             startListening: startListening,
             stopListening: stopListening,

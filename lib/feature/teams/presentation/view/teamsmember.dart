@@ -64,21 +64,27 @@ class Teamsmember extends StatelessWidget {
                   BuildteamOwnRow(
                       teamName: "Team 1", members: "8 members", role: "Owner"),
                   Divider(),
-                  BuildteamOwnRow (
+                  BuildteamOwnRow(
                       teamName: "Team 1", members: "8 members", role: "Owner"),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   MaterialButton(
                     padding: EdgeInsets.all(14),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)
-                    ),
+                        borderRadius: BorderRadius.circular(20)),
                     color: Colors.black,
-                    onPressed: (){},child: Text("Create New Team",style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold
-                  ),),)
-                  
+                    onPressed: () {
+                      Navigator.of(context).pushNamed("newteam");
+                    },
+                    child: Text(
+                      "Create New Team",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
                 ],
               ),
             ),
