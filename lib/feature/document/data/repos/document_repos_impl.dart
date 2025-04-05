@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:collab_doc/core/utils/function/checkinternet.dart';
-import 'package:collab_doc/core/widgets/custom_error.dart';
 import 'package:collab_doc/feature/document/data/repos/document_repos.dart';
 import 'package:http/http.dart' as http;
 

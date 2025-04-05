@@ -1,6 +1,7 @@
 import 'package:collab_doc/core/widgets/custom_error.dart';
 import 'package:collab_doc/core/widgets/custom_loading.dart';
 import 'package:collab_doc/feature/document/prenstation/manager/cubit/document_cubit.dart';
+import 'package:collab_doc/feature/document/prenstation/view/widgets/apparaddnewdocument.dart';
 import 'package:collab_doc/feature/document/prenstation/view/widgets/buttons.dart';
 import 'package:collab_doc/feature/document/prenstation/view/widgets/cursordocument.dart';
 import 'package:collab_doc/feature/document/prenstation/view/widgets/showdialog_scissors.dart';
@@ -99,7 +100,10 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
   void initState() {
     super.initState();
     init();
-    // Load the existing document if provided
+    init2();
+  }
+
+  void init2() {
     if (widget.initialContent != null) {
       try {
         final List<dynamic> deltaJson = jsonDecode(widget.initialContent!);
@@ -118,37 +122,9 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("New Document"),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.content_cut_outlined),
-            onPressed: () {
-              showDialogScissors(
-                context: context,
-                textEditingController: _textEditingController,
-                controller: _controller,
-                onPressed: () {
-                  if (_controller.document.toPlainText().trim().isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Please enter text to summarize."),
-                      ),
-                    );
-                    Navigator.of(context).pop();
-                    return;
-                  }
-                  BlocProvider.of<DocumentCubit>(context).summarizeText(
-                    _controller.document.toPlainText(),
-                  );
-                  Navigator.of(context).pop();
-                },
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: ApparAddNewDocument(
+          textEditingController: _textEditingController,
+          controller: _controller),
       body: Column(
         children: [
           QuillSimpleToolbar(
