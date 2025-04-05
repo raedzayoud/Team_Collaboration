@@ -10,12 +10,16 @@ class DocumentCubit extends Cubit<DocumentState> {
   Future<void> summarizeText(String text) async {
     emit(DocumentLoading());
 
-    var result = documentRepos.summarizeText(text);
-
-    result.then((value) {
-      emit(DocumentSuccess(summary: value));
-    }).catchError((error) {
+    try {
+      var result = await documentRepos.summarizeText(text); // Use await here
+      emit(DocumentSuccess(summary: result));
+    } catch (error) {
+      // Print or log the error to ensure it's being caught
+      print('Error: $error');
       emit(DocumentFailure(errorMessage: error.toString()));
-    });
+      // Delay before resetting to the initial state
+      await Future.delayed(Duration(seconds: 4));
+      emit(DocumentInitial());
+    }
   }
 }

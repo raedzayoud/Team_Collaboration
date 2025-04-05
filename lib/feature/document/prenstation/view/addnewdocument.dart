@@ -149,45 +149,49 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
           ),
         ],
       ),
-      body: BlocListener<DocumentCubit, DocumentState>(
-        listener: (context, state) {
-          if (state is DocumentSuccess) {
-            _controller = quill.QuillController(
-              document: quill.Document()..insert(0, state.summary),
-              selection: const TextSelection.collapsed(offset: 0),
-            );
-          }
-        },
-        child: BlocBuilder<DocumentCubit, DocumentState>(
-          builder: (context, state) {
-            if (state is DocumentLoading) {
-              return CustomLoading();
-            } else if (state is DocumentFailure) {
-              return CustomError(errorMessage: state.errorMessage);
-            } else {
-              return Column(
-                children: [
-                  QuillSimpleToolbar(
-                    controller: _controller,
-                  ),
-                  Expanded(
+      body: Column(
+        children: [
+          QuillSimpleToolbar(
+            controller: _controller,
+          ),
+          BlocListener<DocumentCubit, DocumentState>(
+            listener: (context, state) {
+              if (state is DocumentSuccess) {
+                _controller = quill.QuillController(
+                  document: quill.Document()..insert(0, state.summary),
+                  selection: const TextSelection.collapsed(offset: 0),
+                );
+              }
+              if (state is DocumentInitial) {
+                _controller = quill.QuillController.basic();
+              }
+            },
+            child: BlocBuilder<DocumentCubit, DocumentState>(
+              builder: (context, state) {
+                if (state is DocumentLoading) {
+                  return CustomLoading();
+                } else if (state is DocumentFailure) {
+                  return CustomError(errorMessage: state.errorMessage);
+                } else {
+                  return Expanded(
                     child: SingleChildScrollView(
                       child: Cursordocument(
                         controller: _controller,
                       ),
                     ),
-                  ),
-                  Buttons(
-                    startListening: startListening,
-                    stopListening: stopListening,
-                    speechToText: speechToText,
-                    save: _saveDocument,
-                  ),
-                ],
-              );
-            }
-          },
-        ),
+                  );
+                }
+              },
+            ),
+          ),
+          Spacer(),
+          Buttons(
+            startListening: startListening,
+            stopListening: stopListening,
+            speechToText: speechToText,
+            save: _saveDocument,
+          ),
+        ],
       ),
     );
   }
