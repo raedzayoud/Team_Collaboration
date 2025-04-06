@@ -93,6 +93,23 @@ class _NewteamState extends State<Newteam> {
               validator: (val) {},
             ),
             const SizedBox(height: 16),
+            const Text(
+              "Description",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 10),
+            CustomTextField(
+              controller: teamNameController,
+              hintText: "Description",
+              obscureText: false,
+              suffixIcon: Icon(Icons.group_sharp),
+              validator: (val) {},
+            ),
+            const SizedBox(height: 16),
             
           ],
         ),
