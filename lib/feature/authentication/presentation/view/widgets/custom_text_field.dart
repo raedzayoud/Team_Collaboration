@@ -19,7 +19,7 @@ class CustomTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextFormField(
-        keyboardType: hintText=="Enter your phone"? TextInputType.number:null,
+        keyboardType: hintText == "Enter your phone" || hintText == "nbre of members" ? TextInputType.number : null,
         obscureText: obscureText,
         validator: validator,
         controller: controller,

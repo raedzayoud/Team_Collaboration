@@ -32,6 +32,25 @@ String? validateSearch(String? val) {
   }
   return null;
 }
+String? validateTeamName(String? val) {
+  if (val == null || val.isEmpty) {
+    return 'Team name cannot be empty';
+  }
+  return null;
+}
+String? validateDescription(String? val) {
+  if (val == null || val.isEmpty) {
+    return 'Description cannot be empty';
+  }
+  return null;
+}
+
+String? validateNbre(String? val) {
+  if (val == null || val.isEmpty) {
+    return 'Nbre Members cannot be empty';
+  }
+  return null;
+}
 
 /* add validate phone* */
 

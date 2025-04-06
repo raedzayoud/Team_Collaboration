@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:collab_doc/core/utils/function/validator.dart';
 import 'package:collab_doc/core/utils/responsive.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +13,15 @@ class Newteam extends StatefulWidget {
 
 class _NewteamState extends State<Newteam> {
   TextEditingController teamNameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController nbreController = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
     teamNameController.dispose();
+    descriptionController.dispose();
+    nbreController.dispose();
+    _formKey.currentState?.dispose();
     super.dispose();
   }
 
@@ -57,61 +63,93 @@ class _NewteamState extends State<Newteam> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Team Name",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Team Name",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
               ),
-            ),
-            CustomTextField(
-              controller: teamNameController,
-              hintText: "Team Name",
-              obscureText: false,
-              suffixIcon: Icon(Icons.group_sharp),
-              validator: (val) {},
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "Description",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
+              CustomTextField(
+                controller: teamNameController,
+                hintText: "Team Name",
+                obscureText: false,
+                suffixIcon: Icon(Icons.group_sharp),
+                validator: (val) {
+                  return validateTeamName(val);
+                },
               ),
-            ),
-            const SizedBox(height: 10),
-            CustomTextField(
-              controller: teamNameController,
-              hintText: "Description",
-              obscureText: false,
-              suffixIcon: Icon(Icons.group_sharp),
-              validator: (val) {},
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              "Description",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
+              const SizedBox(height: 10),
+              const Text(
+                "Description",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            CustomTextField(
-              controller: teamNameController,
-              hintText: "Description",
-              obscureText: false,
-              suffixIcon: Icon(Icons.group_sharp),
-              validator: (val) {},
-            ),
-            const SizedBox(height: 16),
-            
-          ],
+              const SizedBox(height: 10),
+              CustomTextField(
+                controller: descriptionController,
+                hintText: "Description",
+                obscureText: false,
+                suffixIcon: Icon(Icons.group_sharp),
+                validator: (val) {
+                  return validateDescription(val);
+                },
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Nbre of members",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 10),
+              CustomTextField(
+                controller: nbreController,
+                hintText: "nbre of members",
+                obscureText: false,
+                suffixIcon: Icon(Icons.group_sharp),
+                validator: (val) {
+                  return validateNbre(val);
+                },
+              ),
+              const SizedBox(height: 16),
+              Spacer(),
+              Center(
+                child: MaterialButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  minWidth: double.infinity,
+                  color: Colors.black,
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      
+                      
+                    }
+                  },
+                  child: Text(
+                    "Create Team",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,3 @@
-
 import 'package:collab_doc/constant.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +10,16 @@ class Apparchat extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed("members");
+            },
+            icon: Icon(
+              Icons.info_outline,
+              color: Colors.white,
+            ))
+      ],
       leading: IconButton(
         icon: const Icon(
           Icons.arrow_back_ios_new_rounded,
