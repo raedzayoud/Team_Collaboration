@@ -1,3 +1,4 @@
+import 'package:collab_doc/constant.dart';
 import 'package:flutter/material.dart';
 
 class cardmemebers extends StatelessWidget {
@@ -5,15 +6,16 @@ class cardmemebers extends StatelessWidget {
     super.key,
     required this.isAdmin,
     required this.name,
+    required this.isConnected,
+    required this.isOwner,
   });
-
+  final bool isOwner;
   final bool isAdmin;
   final String name;
+  final bool isConnected;
 
   @override
   Widget build(BuildContext context) {
-    final Color darkBlack = Colors.black;
-    final Color darkGrey = Colors.black87;
     final Color notificationGreen = Colors.greenAccent.shade400;
 
     return Card(
@@ -26,7 +28,7 @@ class cardmemebers extends StatelessWidget {
         leading: Stack(
           children: [
             CircleAvatar(
-              backgroundColor: darkBlack,
+              backgroundColor: KPrimayColor,
               child: const Icon(
                 Icons.person,
                 color: Colors.white,
@@ -40,7 +42,7 @@ class cardmemebers extends StatelessWidget {
                 width: 12,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: notificationGreen,
+                  color: isConnected == true ? notificationGreen : null,
                 ),
               ),
             ),
@@ -51,29 +53,31 @@ class cardmemebers extends StatelessWidget {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: darkBlack,
+           // color: KPrimayColor,
           ),
         ),
         subtitle: Row(
           children: [
             Icon(
-              isAdmin ? Icons.shield : Icons.group,
-              color: darkGrey,
+              isAdmin || isOwner ? Icons.shield : Icons.group,
+              color: KPrimayColor,
               size: 18,
             ),
             const SizedBox(width: 5),
             Text(
-              isAdmin ? 'Admin' : 'Member',
+              isOwner
+                  ? 'Owner'
+                  : isAdmin
+                      ? 'Admin'
+                      : 'Member',
               style: TextStyle(
-                color: darkGrey,
+                color: KPrimayColor,
                 fontWeight: FontWeight.w500,
               ),
             ),
           ],
         ),
-        trailing: isAdmin
-            ? Icon(Icons.verified, color: darkBlack)
-            : null,
+        trailing: isOwner ? Icon(Icons.verified, color: KPrimayColor) : null,
       ),
     );
   }

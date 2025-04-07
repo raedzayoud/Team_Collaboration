@@ -7,15 +7,12 @@ class Members extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, String> members = {
-      "Yassine": "owner",
-      "Raed": "admin",
-      "Houssaine": "admin",
-      "Ali": "member",
-      "Sara": "member",
-      "Omar": "member",
-    };
-
+    List<Map<String, dynamic>> members = [
+      {'name': 'John Doe', 'role': 'owner', 'isconnected': true},
+      {'name': 'Jane Smith', 'role': 'member', 'isconnected': false},
+      {'name': 'Alice Johnson', 'role': 'member', 'isconnected': true},
+      {'name': 'Bob Brown', 'role': 'admin', 'isconnected': false},
+    ];
     return Scaffold(
       appBar: ApparMemebers(),
       body: Padding(
@@ -23,11 +20,18 @@ class Members extends StatelessWidget {
         child: ListView.builder(
           itemCount: members.length,
           itemBuilder: (context, index) {
-            final name = members.keys.elementAt(index);
-            final role = members.values.elementAt(index);
+            final name = members[index]['name'];
+            final role = members[index]['role'];
+            final isConnected = members[index]['isconnected'];
+            final isOwner = role == 'owner';
             final isAdmin = role == 'admin';
 
-            return cardmemebers(isAdmin: isAdmin, name: name);
+            return cardmemebers(
+              isOwner: isOwner,
+              isAdmin: isAdmin,
+              name: name,
+              isConnected: isConnected,
+            );
           },
         ),
       ),
