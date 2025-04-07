@@ -1,14 +1,33 @@
 import 'package:collab_doc/core/utils/responsive.dart';
+import 'package:collab_doc/feature/settings/presentation/view/widgets/buttonsettings.dart';
+import 'package:collab_doc/feature/settings/presentation/view/widgets/customtextfieldsettings.dart';
 import 'package:flutter/material.dart';
 
-class Settings extends StatelessWidget {
+class Settings extends StatefulWidget {
   const Settings({super.key});
+
+  @override
+  State<Settings> createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  final TextEditingController usernameController =
+      TextEditingController(text: 'raed zayoud');
+  final TextEditingController emailController =
+      TextEditingController(text: "raed@gmail.com");
+  final TextEditingController phoneController =
+      TextEditingController(text: "+216 27740388");
+  @override
+  void dispose() {
+    usernameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    final TextEditingController _dobController = TextEditingController();
-    String? _selectedGender;
     return SafeArea(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -44,18 +63,8 @@ class Settings extends StatelessWidget {
                 SizedBox(
                   height: 5,
                 ),
-                TextFormField(
-                  readOnly: true,
-                  initialValue: "Alex",
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                  ),
+                CustomTextformFieldSettings(
+                  controller: usernameController,
                 ),
                 const SizedBox(height: 10),
                 const Text(
@@ -68,18 +77,8 @@ class Settings extends StatelessWidget {
                 SizedBox(
                   height: 5,
                 ),
-                TextFormField(
-                  readOnly: true,
-                  initialValue: "alex.johnson@example.com",
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                  ),
+                CustomTextformFieldSettings(
+                  controller: emailController,
                 ),
                 const SizedBox(height: 10),
                 const Text(
@@ -89,42 +88,14 @@ class Settings extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                CustomTextformFieldSettings(
+                  controller: phoneController,
+                ),
                 SizedBox(
                   height: 5,
                 ),
-                TextFormField(
-                  readOnly: true,
-                  initialValue: "+1 (555) 123-4567",
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    MaterialButton(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        onPressed: () {},
-                        child: Text("Edit")),
-                    MaterialButton(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        onPressed: () {},
-                        child: Text("Logout")),
-                  ],
-                )
+                ButtonsSettings()
               ],
             ),
           ),
