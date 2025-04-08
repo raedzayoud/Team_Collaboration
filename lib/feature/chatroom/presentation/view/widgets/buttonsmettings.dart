@@ -10,13 +10,16 @@ class ButtonsMettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CustomButtons(
-          name: "New Mettings",
-          onPressed: () {
-            BlocProvider.of<MettingsCubit>(context).createMeeting();
-          },
+        Container(
+          margin: EdgeInsets.only(left: 10),
+          child: CustomButtons(
+            name: "New Mettings",
+            onPressed: () {
+              BlocProvider.of<MettingsCubit>(context).createMeeting();
+            },
+          ),
         ),
         SizedBox(
           width: 10,

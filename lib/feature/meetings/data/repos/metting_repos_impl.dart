@@ -14,7 +14,7 @@ class MettingReposImpl implements MeetingRepos {
           "startWithVideoMuted": true,
         },
         userInfo: JitsiMeetUserInfo(
-          displayName: "flutter user",
+          displayName: "raed",
           email: "raed@gmail.com",
         ),
       );
