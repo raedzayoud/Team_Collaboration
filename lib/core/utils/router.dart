@@ -3,6 +3,7 @@ import 'package:collab_doc/feature/authentication/presentation/view/register_vie
 import 'package:collab_doc/feature/chatroom/presentation/view/chatroom.dart';
 import 'package:collab_doc/feature/chatroom/presentation/view/members.dart';
 import 'package:collab_doc/feature/home/presentation/view/home_screen_view.dart';
+import 'package:collab_doc/feature/invitation/presentation/view/request.dart';
 import 'package:collab_doc/feature/meetings/presentation/view/joinmettings.dart';
 import 'package:collab_doc/feature/settings/presentation/view/edit.dart';
 import 'package:collab_doc/feature/teams/presentation/view/newteam.dart';
@@ -18,6 +19,7 @@ class AppRouter {
     "members": (context) => const Members(),
     "edit": (context) => const Edit(),
     "joinmettings":(context) => const Joinmettings(),
+    "request":(context) => const Request(),
     //"addDocument":(context)=>AddDocumentPage(),
   };
 }

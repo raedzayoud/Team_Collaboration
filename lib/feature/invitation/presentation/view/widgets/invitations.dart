@@ -1,4 +1,3 @@
-
 import 'package:collab_doc/constant.dart';
 import 'package:collab_doc/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +48,7 @@ class invitations extends StatelessWidget {
           Spacer(),
           IconButton(
             onPressed: () {
-              //  Navigator.of(context).pushNamed("chat", arguments: id);
+              Navigator.of(context).pushNamed("request");
             },
             icon: Icon(
               Icons.arrow_forward_ios,

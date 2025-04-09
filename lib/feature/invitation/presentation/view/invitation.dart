@@ -8,7 +8,7 @@ class Invitation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> team = ["Request", "Pending", "Accept"];
+    List<String> team = ["Request", "Pending", "Response"];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
