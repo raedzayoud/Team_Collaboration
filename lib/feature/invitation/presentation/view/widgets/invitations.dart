@@ -42,13 +42,17 @@ class invitations extends StatelessWidget {
           ),
           Text(team[index],
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 16,
                 color: Colors.white,
               )),
           Spacer(),
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed("request");
+              team[index] == "Invitations Request"
+                  ? Navigator.of(context).pushNamed("request")
+                  : team[index] == "Pending | Accepted | Rejected"
+                      ? Navigator.of(context).pushNamed("pending")
+                      : Navigator.of(context).pushNamed("response");
             },
             icon: Icon(
               Icons.arrow_forward_ios,
