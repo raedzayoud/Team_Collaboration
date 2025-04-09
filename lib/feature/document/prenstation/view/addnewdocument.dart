@@ -142,22 +142,20 @@ class _AddDocumentPageState extends State<AddDocumentPage> {
                 _controller = quill.QuillController.basic();
               }
             },
-            child: BlocBuilder<DocumentCubit, DocumentState>(
-              builder: (context, state) {
-                if (state is DocumentLoading) {
-                  return CustomLoading();
-                } else if (state is DocumentFailure) {
-                  return CustomError(errorMessage: state.errorMessage);
-                } else {
-                  return Expanded(
-                    child: SingleChildScrollView(
-                      child: Cursordocument(
-                        controller: _controller,
-                      ),
-                    ),
-                  );
-                }
-              },
+            child: Expanded(
+              child: BlocBuilder<DocumentCubit, DocumentState>(
+                builder: (context, state) {
+                  if (state is DocumentLoading) {
+                    return CustomLoading();
+                  } else if (state is DocumentFailure) {
+                    return CustomError(errorMessage: state.errorMessage);
+                  } else {
+                    return Cursordocument(
+                      controller: _controller,
+                    );
+                  }
+                },
+              ),
             ),
           ),
           Buttons(

@@ -1,3 +1,4 @@
+import 'package:collab_doc/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class CustomError extends StatelessWidget {
@@ -7,14 +8,12 @@ class CustomError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: AppResponsive.heigth(context) * .1,
+      width: AppResponsive.width(context) *.9,
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.red.shade50,
-        border: Border.all(color: Colors.red),
-        borderRadius: BorderRadius.circular(12),
-      ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Icon(Icons.error_outline, color: Colors.red),
           const SizedBox(width: 10),
@@ -26,6 +25,8 @@ class CustomError extends StatelessWidget {
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
