@@ -1,4 +1,3 @@
-
 import 'package:collab_doc/constant.dart';
 import 'package:flutter/material.dart';
 
@@ -10,9 +9,14 @@ class ApparTeamDetails extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: KPrimayColor,
       centerTitle: true,
-      leading: const Icon(
-        Icons.arrow_back_ios,
-        color: Colors.white,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        icon: Icon(
+          Icons.arrow_back_ios,
+          color: Colors.white,
+        ),
       ),
       title: const Text(
         'Team Details',

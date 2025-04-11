@@ -27,7 +27,7 @@ class Teamdetails extends StatelessWidget {
                 color: Color.fromARGB(255, 228, 144, 18),
               ),
               title: Text(
-                'Team Name',
+                'Team Name (8 Members)',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
