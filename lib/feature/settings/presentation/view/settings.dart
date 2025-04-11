@@ -17,6 +17,7 @@ class _SettingsState extends State<Settings> {
       TextEditingController(text: "raed@gmail.com");
   final TextEditingController phoneController =
       TextEditingController(text: "+216 27740388");
+
   @override
   void dispose() {
     usernameController.dispose();
@@ -28,75 +29,84 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
+
     return SafeArea(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Personal Information",
-                      style: TextStyle(
-                          fontSize: 20,
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+              horizontal: AppResponsive.width(context) * 0.05, vertical: AppResponsive.heigth(context) * 0.25),
+          child: Center(
+            child: Container(
+              width: AppResponsive.width(context) > 600 ? 500 : double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text(
+                        "Personal Information",
+                        style: TextStyle(
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Colors.red),
-                    )),
-                SizedBox(
-                  height: AppResponsive.heigth(context) * .3,
+                          color: Colors.red[700],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    const Text(
+                      "Username",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextformFieldSettings(
+                      controller: usernameController,
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Email",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextformFieldSettings(
+                      controller: emailController,
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Phone Number",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextformFieldSettings(
+                      controller: phoneController,
+                    ),
+                    const SizedBox(height: 30),
+                    ButtonsSettings(),
+                  ],
                 ),
-                const Text(
-                  "Username",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                CustomTextformFieldSettings(
-                  controller: usernameController,
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  "Email",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                CustomTextformFieldSettings(
-                  controller: emailController,
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  "Phone Number",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CustomTextformFieldSettings(
-                  controller: phoneController,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                const SizedBox(height: 30),
-                ButtonsSettings()
-              ],
+              ),
             ),
           ),
         ),
