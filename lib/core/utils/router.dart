@@ -9,6 +9,7 @@ import 'package:collab_doc/feature/invitation/presentation/view/responses.dart';
 import 'package:collab_doc/feature/meetings/presentation/view/joinmettings.dart';
 import 'package:collab_doc/feature/settings/presentation/view/edit.dart';
 import 'package:collab_doc/feature/teams/presentation/view/newteam.dart';
+import 'package:collab_doc/feature/teams/presentation/view/teamdetails.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -20,10 +21,11 @@ class AppRouter {
     "newteam": (context) => const Newteam(),
     "members": (context) => const Members(),
     "edit": (context) => const Edit(),
-    "joinmettings":(context) => const Joinmettings(),
-    "request":(context) => const Request(),
-    "pending":(context) => const Pending(),
-    "response":(context) => const Responses(),
+    "joinmettings": (context) => const Joinmettings(),
+    "request": (context) => const Request(),
+    "pending": (context) => const Pending(),
+    "response": (context) => const Responses(),
+    "teamdetails": (context) => Teamdetails(),
     //"addDocument":(context)=>AddDocumentPage(),
   };
 }
