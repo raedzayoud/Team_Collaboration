@@ -13,11 +13,11 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       final result = await authenticationRepo.signIn(user);
       result.fold(
-        (failure) => emit(AuthenticationFailure()),
+        (failure) => emit(AuthenticationFailure(errorMessage: failure.errorMessage)),
         (success) => emit(AuthenticationSuccess()),
       );
     } catch (e) {
-      emit(AuthenticationFailure());
+      emit(AuthenticationFailure(errorMessage: "An error occurred"));
     }
   }
 }

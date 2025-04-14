@@ -8,7 +8,7 @@ abstract class Failure {
 
 class ServeurFailure extends Failure {
   ServeurFailure({required String errorsMessage}) : super(errorsMessage);
-  
+
   factory ServeurFailure.fromDioError(DioException dioError) {
     switch (dioError.type) {
       case DioExceptionType.connectionTimeout:
@@ -47,7 +47,6 @@ class ServeurFailure extends Failure {
             errorsMessage: "Oops, there was an error. Please try again.");
     }
   }
-
   factory ServeurFailure.fromResponse(int statusCode, dynamic response) {
     if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
       return ServeurFailure(
@@ -57,8 +56,17 @@ class ServeurFailure extends Failure {
       return ServeurFailure(
           errorsMessage: "Your request was not found, please try later!");
     } else if (statusCode == 500) {
-      return ServeurFailure(
-          errorsMessage: "Internal Server error, please try later!");
+      final message = response.toString();
+
+      if (message.contains("Email already exists")) {
+        return ServeurFailure(
+            errorsMessage: "This email is already registered.");
+      } else if (message.contains("Username already exists")) {
+        return ServeurFailure(errorsMessage: "This username is already taken.");
+      } else {
+        return ServeurFailure(
+            errorsMessage: "Internal Server error, please try later!");
+      }
     } else {
       return ServeurFailure(
           errorsMessage: "Oops, there was an error. Please try again.");

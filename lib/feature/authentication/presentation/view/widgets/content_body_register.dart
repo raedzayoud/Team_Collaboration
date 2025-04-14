@@ -1,3 +1,5 @@
+import 'package:collab_doc/feature/authentication/data/model/user.dart';
+import 'package:collab_doc/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/have_account.dart';
 import 'package:flutter/material.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_button.dart';
@@ -6,6 +8,7 @@ import 'package:collab_doc/feature/authentication/presentation/view/widgets/cust
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_title.dart';
 import 'package:collab_doc/core/utils/assets.dart';
 import 'package:collab_doc/core/utils/function/validator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class content_body_register extends StatelessWidget {
   const content_body_register({
@@ -87,7 +90,16 @@ class content_body_register extends StatelessWidget {
                 CustomButton(
                   text: "Register",
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
+                    if (_formKey.currentState!.validate()) {
+                      User user = User(
+                        email: email.text,
+                        username: username.text,
+                        phoneNumber: phone.text,
+                        password: password.text,
+                      );
+                      BlocProvider.of<AuthenticationCubit>(context)
+                          .signIn(user);
+                    }
                   },
                 ),
                 SizedBox(

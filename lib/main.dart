@@ -1,3 +1,7 @@
+import 'package:collab_doc/feature/authentication/data/repos/authentication_repo.dart';
+import 'package:collab_doc/feature/authentication/data/repos/authentication_repo_impl.dart';
+import 'package:collab_doc/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
+import 'package:collab_doc/feature/authentication/presentation/view/login_view.dart';
 import 'package:collab_doc/feature/document/data/repos/document_repos_impl.dart';
 import 'package:collab_doc/feature/document/prenstation/manager/cubit/document_cubit.dart';
 import 'package:collab_doc/feature/home/presentation/view/home_screen_view.dart';
@@ -17,6 +21,7 @@ void main() async {
   sharedPreferences = await SharedPreferences.getInstance();
   infoUserSharedPreferences = await SharedPreferences.getInstance();
   runApp(const MyApp());
+  
 }
 
 class MyApp extends StatelessWidget {
@@ -28,6 +33,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => DocumentCubit(DocumentReposImpl())),
         BlocProvider(create: (context) => MettingsCubit(MettingReposImpl())),
+        BlocProvider(create: (context) => AuthenticationCubit(AuthenticationRepoImpl())),
       ],
       child: MaterialApp(
         localizationsDelegates: [
@@ -42,7 +48,7 @@ class MyApp extends StatelessWidget {
           // Add any other locales you want to support
         ],
         debugShowCheckedModeBanner: false,
-        home: HomeScreenView(),
+        home: LoginView(),
         routes: AppRouter.pageRoutes,
       ),
     );
