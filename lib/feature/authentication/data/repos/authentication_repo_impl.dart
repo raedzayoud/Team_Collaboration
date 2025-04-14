@@ -14,11 +14,7 @@ class AuthenticationRepoImpl implements AuthenticationRepo {
         'http://localhost:8080/api/v1/users',
         data: user.toJson(),
       );
-      if (response.statusCode == 200) {
-        return Right(null);
-      } else {
-        return Left(ServeurFailure(errorsMessage: response.data['message']));
-      }
+      return Right(null);
     } catch (e) {
       if (e is DioException) {
         return left(ServeurFailure.fromDioError(e));
