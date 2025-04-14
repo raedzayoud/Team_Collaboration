@@ -1,4 +1,3 @@
-import 'package:collab_doc/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:flutter/material.dart';
 
 void snackbarerror(BuildContext context, String errorMessage) {

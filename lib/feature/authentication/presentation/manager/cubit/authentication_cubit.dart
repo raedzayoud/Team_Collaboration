@@ -20,4 +20,17 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       emit(AuthenticationFailure(errorMessage: "An error occurred"));
     }
   }
+
+  Future<void> login(String email,String password) async {
+    emit(LoginLoading());
+    try {
+      final result = await authenticationRepo.login(email,password);
+      result.fold(
+        (failure) => emit(LoginFailure(errorMessage: failure.errorMessage)),
+        (success) => emit(LoginSuccess()),
+      );
+    } catch (e) {
+      emit(AuthenticationFailure(errorMessage: "An error occurred"));
+    }
+  }
 }
