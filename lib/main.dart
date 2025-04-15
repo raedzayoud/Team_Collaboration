@@ -20,8 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
   infoUserSharedPreferences = await SharedPreferences.getInstance();
-  runApp(const MyApp());
-  
+  runApp(const MyApp());  
 }
 
 class MyApp extends StatelessWidget {

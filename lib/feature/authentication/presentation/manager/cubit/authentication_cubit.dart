@@ -27,7 +27,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       final result = await authenticationRepo.login(email,password);
       result.fold(
         (failure) => emit(LoginFailure(errorMessage: failure.errorMessage)),
-        (success) => emit(LoginSuccess()),
+        (token) => emit(LoginSuccess(token: token)),
       );
     } catch (e) {
       emit(AuthenticationFailure(errorMessage: "An error occurred"));

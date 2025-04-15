@@ -1,4 +1,7 @@
+import 'package:collab_doc/core/utils/function/snackbar.dart';
+import 'package:collab_doc/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/content_body_login.dart';
+import 'package:collab_doc/main.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -26,16 +29,36 @@ class _LoginViewBodyState extends State<LoginViewBody> {
     //String? errorMessage;
 
     return SafeArea(
-      child: Column(
-        children: [
-          Expanded(
-            child: content_body_login(
-              formKey: formKey,
-              email: email,
-              password: password,
-            ),
-          ),
-        ],
+      child: BlocListener<AuthenticationCubit, AuthenticationState>(
+        listener: (context, state) {
+          if (state is LoginFailure) {
+            snackbarerror(context, state.errorMessage);
+          }
+          if (state is LoginSuccess) {
+            infoUserSharedPreferences.setString("token", state.token);
+            print(state.token+" -----------------------------------------");
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil("home", (route) => false);
+          }
+        },
+        child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
+          builder: (context, state) {
+            if (state is LoginLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Column(
+              children: [
+                Expanded(
+                  child: content_body_login(
+                    formKey: formKey,
+                    email: email,
+                    password: password,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

@@ -31,16 +31,22 @@ class AuthenticationRepoImpl implements AuthenticationRepo {
   }
 
   @override
-  Future<Either<Failure, void>> login(String email, String password) async {
+  Future<Either<Failure, String>> login(String email, String password) async {
     if (await checkInternet()) {
       // print(user.toJson());
       var response;
       try {
         response = await dio.post(
-          Applink.apiSignup,
+          Applink.apiLogin,
           data: {"email": email, "password": password},
         );
-        return Right(null);
+        String token = response.data['token'];
+        if (token != null) {
+          // Optionally: Save token in shared preferences or secure storage here
+          return Right(token);
+        } else {
+          return Left(ServeurFailure(errorsMessage: "Invalid token received"));
+        }
       } catch (e) {
         if (e is DioException) {
           return Left(ServeurFailure.fromDioError(e));

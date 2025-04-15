@@ -14,7 +14,10 @@ final class AuthenticationFailure extends AuthenticationState {
 
 final class AuthenticationSuccess extends AuthenticationState {}
 
-final class LoginSuccess extends AuthenticationState {}
+final class LoginSuccess extends AuthenticationState {
+  final String token;
+  LoginSuccess({required this.token});
+}
 
 final class LoginFailure extends AuthenticationState {
   final String errorMessage;

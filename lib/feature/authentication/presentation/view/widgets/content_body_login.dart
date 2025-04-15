@@ -1,3 +1,4 @@
+import 'package:collab_doc/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_button.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_image.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_password_forget.dart';
@@ -7,6 +8,7 @@ import 'package:collab_doc/feature/authentication/presentation/view/widgets/sign
 import 'package:collab_doc/core/utils/assets.dart';
 import 'package:collab_doc/core/utils/function/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class content_body_login extends StatelessWidget {
   const content_body_login({
@@ -70,8 +72,13 @@ class content_body_login extends StatelessWidget {
               CustomButton(
                 text: "Login",
                 onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil("home", (route)=>false);
-                  if (_formKey.currentState!.validate()) {}
+                //  Navigator.of(context).pushNamedAndRemoveUntil("home", (route)=>false);
+                  if (_formKey.currentState!.validate()) {
+                    BlocProvider.of<AuthenticationCubit>(context).login(
+                      email.text,
+                      password.text,
+                    );
+                  }
                 },
               ),
               Row(
