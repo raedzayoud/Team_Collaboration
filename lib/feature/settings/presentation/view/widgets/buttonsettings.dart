@@ -1,4 +1,5 @@
 
+import 'package:collab_doc/main.dart';
 import 'package:flutter/material.dart';
 
 class ButtonsSettings extends StatelessWidget {
@@ -25,7 +26,11 @@ class ButtonsSettings extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            onPressed: () {},
+            onPressed: () {
+              infoUserSharedPreferences.clear();
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  "login", (route) => false);
+            },
             child: Text("Logout")),
       ],
     );

@@ -21,10 +21,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     }
   }
 
-  Future<void> login(String email,String password) async {
+  Future<void> login(String username,String password) async {
     emit(LoginLoading());
     try {
-      final result = await authenticationRepo.login(email,password);
+      final result = await authenticationRepo.login(username,password);
       result.fold(
         (failure) => emit(LoginFailure(errorMessage: failure.errorMessage)),
         (token) => emit(LoginSuccess(token: token)),

@@ -14,12 +14,12 @@ class content_body_login extends StatelessWidget {
   const content_body_login({
     super.key,
     required GlobalKey<FormState> formKey,
-    required this.email,
+    required this.username,
     required this.password,
   }) : _formKey = formKey;
 
   final GlobalKey<FormState> _formKey;
-  final TextEditingController email;
+  final TextEditingController username;
   final TextEditingController password;
 
   @override
@@ -46,10 +46,10 @@ class content_body_login extends StatelessWidget {
               CustomTextField(
                 obscureText: false,
                 validator: (val) {
-                  return validateEmail(val);
+                  return validateFullName(val);
                 },
-                controller: email,
-                hintText: "Enter your email",
+                controller: username,
+                hintText: "Enter your username",
                 suffixIcon: Icon(Icons.email),
               ),
               const SizedBox(height: 20),
@@ -75,7 +75,7 @@ class content_body_login extends StatelessWidget {
                 //  Navigator.of(context).pushNamedAndRemoveUntil("home", (route)=>false);
                   if (_formKey.currentState!.validate()) {
                     BlocProvider.of<AuthenticationCubit>(context).login(
-                      email.text,
+                      username.text,
                       password.text,
                     );
                   }

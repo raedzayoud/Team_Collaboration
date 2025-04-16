@@ -13,12 +13,12 @@ class LoginViewBody extends StatefulWidget {
 }
 
 class _LoginViewBodyState extends State<LoginViewBody> {
-  TextEditingController email = TextEditingController();
+  TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
 
   @override
   void dispose() {
-    email.dispose();
+    username.dispose();
     password.dispose();
     super.dispose();
   }
@@ -51,7 +51,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 Expanded(
                   child: content_body_login(
                     formKey: formKey,
-                    email: email,
+                    username: username,
                     password: password,
                   ),
                 ),

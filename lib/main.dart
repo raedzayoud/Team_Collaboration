@@ -20,7 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
   infoUserSharedPreferences = await SharedPreferences.getInstance();
-  runApp(const MyApp());  
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -32,7 +32,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => DocumentCubit(DocumentReposImpl())),
         BlocProvider(create: (context) => MettingsCubit(MettingReposImpl())),
-        BlocProvider(create: (context) => AuthenticationCubit(AuthenticationRepoImpl())),
+        BlocProvider(
+            create: (context) => AuthenticationCubit(AuthenticationRepoImpl())),
       ],
       child: MaterialApp(
         localizationsDelegates: [
@@ -47,7 +48,9 @@ class MyApp extends StatelessWidget {
           // Add any other locales you want to support
         ],
         debugShowCheckedModeBanner: false,
-        home: LoginView(),
+        home: infoUserSharedPreferences.getString("token") == null
+            ? LoginView()
+            : HomeScreenView(),
         routes: AppRouter.pageRoutes,
       ),
     );
