@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:collab_doc/core/utils/function/snackbar.dart';
 import 'package:collab_doc/feature/document/prenstation/view/addnewdocument.dart';
+import 'package:collab_doc/feature/home/presentation/manager/cubit/home_cubit.dart';
 import 'package:collab_doc/feature/home/presentation/view/widget/apparhome.dart';
 import 'package:collab_doc/feature/home/presentation/view/widget/texthome.dart';
 import 'package:collab_doc/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class Home extends StatefulWidget {
@@ -18,6 +21,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    BlocProvider.of<HomeCubit>(context).getUserDetails();
     _loadDocuments();
     super.initState();
   }
@@ -60,37 +64,63 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            ApparHome(),
-            SizedBox(
-              height: 20,
-            ),
-            Texthome(text: "Recent Document"),
-            documents.isEmpty
-                ? Center(child: Text("No documents saved."))
-                : Expanded(
-                    child: ListView.builder(
-                      itemCount: documents.length,
-                      itemBuilder: (context, index) {
-                        final doc = documents[index];
-
-                        return Card(
-                          color: Colors.white,
-                          child: ListTile(
-                            title: Text("Document ${index + 1}"),
-                            subtitle: Text("ID: ${doc['id']}"),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _deleteDocument(doc['id']!),
-                            ),
-                            onTap: () => _openDocument(doc['content']!),
-                          ),
-                        );
-                      },
-                    ),
+        child: BlocListener<HomeCubit, HomeState>(
+          listener: (context, state) {
+            if (state is UserFailure) {
+              snackbarerror(context, state.errorMessage);
+            } else if (state is UserSuccess) {
+              infoUserSharedPreferences.setString(
+                  "username", state.userDetails.username);
+              infoUserSharedPreferences.setString(
+                  "email", state.userDetails.email);
+              infoUserSharedPreferences.setString(
+                  "id", state.userDetails.id.toString());
+              infoUserSharedPreferences.setString(
+                  "active", state.userDetails.active.toString());
+            }
+          },
+          child: BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              if (state is UserLoading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Column(
+                children: [
+                  ApparHome(),
+                  SizedBox(
+                    height: 20,
                   ),
-          ],
+                  Texthome(text: "Recent Document"),
+                  documents.isEmpty
+                      ? Center(child: Text("No documents saved."))
+                      : Expanded(
+                          child: ListView.builder(
+                            itemCount: documents.length,
+                            itemBuilder: (context, index) {
+                              final doc = documents[index];
+
+                              return Card(
+                                color: Colors.white,
+                                child: ListTile(
+                                  title: Text("Document ${index + 1}"),
+                                  subtitle: Text("ID: ${doc['id']}"),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () =>
+                                        _deleteDocument(doc['id']!),
+                                  ),
+                                  onTap: () => _openDocument(doc['content']!),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                ],
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
