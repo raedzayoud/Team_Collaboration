@@ -1,4 +1,3 @@
-import 'package:collab_doc/feature/authentication/data/repos/authentication_repo.dart';
 import 'package:collab_doc/feature/authentication/data/repos/authentication_repo_impl.dart';
 import 'package:collab_doc/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/login_view.dart';
@@ -10,6 +9,8 @@ import 'package:collab_doc/feature/home/presentation/view/home_screen_view.dart'
 import 'package:collab_doc/core/utils/router.dart';
 import 'package:collab_doc/feature/meetings/data/repos/metting_repos_impl.dart';
 import 'package:collab_doc/feature/meetings/presentation/manger/cubit/mettings_cubit.dart';
+import 'package:collab_doc/feature/settings/data/repos/settings_repos_impl.dart';
+import 'package:collab_doc/feature/settings/presentation/manager/cubit/settings_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -37,6 +38,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) => AuthenticationCubit(AuthenticationRepoImpl())),
         BlocProvider(create: (context) => HomeCubit(HomeReposImpl())),
+        BlocProvider(
+          create: (context) => SettingsCubit(SettingsReposImpl()),
+        )
       ],
       child: MaterialApp(
         localizationsDelegates: [

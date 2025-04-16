@@ -1,7 +1,11 @@
+import 'package:collab_doc/core/utils/function/snackbar.dart';
+import 'package:collab_doc/feature/settings/presentation/manager/cubit/settings_cubit.dart';
 import 'package:collab_doc/feature/settings/presentation/view/widgets/appareditprofile.dart';
 import 'package:collab_doc/feature/settings/presentation/view/widgets/buttonseditprofile.dart';
 import 'package:collab_doc/feature/settings/presentation/view/widgets/textformfieldedit.dart';
+import 'package:collab_doc/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Edit extends StatefulWidget {
   const Edit({super.key});
@@ -11,41 +15,51 @@ class Edit extends StatefulWidget {
 }
 
 class _EditState extends State<Edit> {
-  final TextEditingController _usernameController =
-      TextEditingController(text: "JohnDoe");
-  final TextEditingController _emailController =
-      TextEditingController(text: "john.doe@example.com");
-  final TextEditingController _phoneController =
-      TextEditingController(text: "+123456789");
+  final TextEditingController _usernameController = TextEditingController();
+  @override
+  void initState() {
+    _usernameController.text =
+        infoUserSharedPreferences.getString("username").toString();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ApparEditProfile(),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextfieldEditProfile(
-              controller: _usernameController,
-              labelText: "username",
-              prefixIcon: Icon(Icons.person),
-            ),
-            const SizedBox(height: 16),
-            TextfieldEditProfile(
-              controller: _emailController,
-              labelText: "email",
-              prefixIcon: Icon(Icons.email),
-            ),
-            const SizedBox(height: 16),
-            TextfieldEditProfile(
-              controller: _phoneController,
-              labelText: "Phone Number",
-              prefixIcon: Icon(Icons.phone),
-            ),
-            const Spacer(),
-            ButtonsEditProfile(),
-          ],
+      body: BlocListener<SettingsCubit, SettingsState>(
+        listener: (context, state) {
+          if (state is SettingsSuccess) {
+            Navigator.pop(context);
+          }
+          if (state is SettingsFailure) {
+            snackbarerror(context, state.message);
+          }
+        },
+        child: BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, state) {
+            if(state is SettingsLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  TextfieldEditProfile(
+                    controller: _usernameController,
+                    labelText: "username",
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                  const Spacer(),
+                  ButtonsEditProfile(
+                    username: _usernameController.text,
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

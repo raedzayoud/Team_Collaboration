@@ -49,9 +49,7 @@ class ServeurFailure extends Failure {
   }
   factory ServeurFailure.fromResponse(int statusCode, dynamic response) {
     if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
-      return ServeurFailure(
-          errorsMessage:
-              response['error']['message'] ?? "Authentication error.");
+      return ServeurFailure(errorsMessage: "Authentication error.");
     } else if (statusCode == 404) {
       return ServeurFailure(
           errorsMessage: "Your request was not found, please try later!");

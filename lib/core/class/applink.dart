@@ -3,5 +3,7 @@ class Applink {
    static const String apiSignup = '$loaclhost/api/v1/users';
    static const String apiLogin = '$loaclhost/api/v1/auth/login';
    static const String apiUserDetails = '$loaclhost/api/v1/users/my';
+   static const String apiModifyUser = '$loaclhost/api/v1/users';
+   static const String apiUpdateStatusUser = '$loaclhost/api/v1/users/updatestatus';
    
 }
