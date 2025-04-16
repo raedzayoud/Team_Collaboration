@@ -36,7 +36,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           }
           if (state is LoginSuccess) {
             infoUserSharedPreferences.setString("token", state.token);
-            print(state.token+" -----------------------------------------");
+            BlocProvider.of<AuthenticationCubit>(context)
+                .updateStatustoActive();
             Navigator.of(context)
                 .pushNamedAndRemoveUntil("home", (route) => false);
           }

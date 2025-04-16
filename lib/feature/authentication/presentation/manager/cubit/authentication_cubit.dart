@@ -13,7 +13,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       final result = await authenticationRepo.signIn(user);
       result.fold(
-        (failure) => emit(AuthenticationFailure(errorMessage: failure.errorMessage)),
+        (failure) =>
+            emit(AuthenticationFailure(errorMessage: failure.errorMessage)),
         (success) => emit(AuthenticationSuccess()),
       );
     } catch (e) {
@@ -21,14 +22,27 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     }
   }
 
-  Future<void> login(String username,String password) async {
+  Future<void> login(String username, String password) async {
     emit(LoginLoading());
     try {
-      final result = await authenticationRepo.login(username,password);
+      final result = await authenticationRepo.login(username, password);
       result.fold(
         (failure) => emit(LoginFailure(errorMessage: failure.errorMessage)),
         (token) => emit(LoginSuccess(token: token)),
       );
+    } catch (e) {
+      emit(AuthenticationFailure(errorMessage: "An error occurred"));
+    }
+  }
+
+  Future<void> updateStatustoActive() async {
+    // emit(AuthenticationLoading());
+    try {
+      final result = await authenticationRepo.updateStatustoActive();
+      // result.fold(
+      //   (failure) => emit(AuthenticationFailure(errorMessage: failure.errorMessage)),
+      //   (token) => emit(AuthenticationSuccess()),
+      // );
     } catch (e) {
       emit(AuthenticationFailure(errorMessage: "An error occurred"));
     }

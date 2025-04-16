@@ -5,4 +5,5 @@ abstract class SettingsRepos {
   Future<Either<Failure, void>> updateProfile({
     required String username,
   });
+  Future<Either<Failure,void>>updateStatustoInActive();
 }

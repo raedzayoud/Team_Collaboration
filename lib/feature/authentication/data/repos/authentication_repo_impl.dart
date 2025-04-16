@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:collab_doc/core/class/applink.dart';
 import 'package:collab_doc/core/error/failure.dart';
 import 'package:collab_doc/core/utils/function/checkinternet.dart';
 import 'package:collab_doc/feature/authentication/data/model/user.dart';
 import 'package:collab_doc/feature/authentication/data/repos/authentication_repo.dart';
+import 'package:collab_doc/main.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
@@ -31,7 +34,8 @@ class AuthenticationRepoImpl implements AuthenticationRepo {
   }
 
   @override
-  Future<Either<Failure, String>> login(String username, String password) async {
+  Future<Either<Failure, String>> login(
+      String username, String password) async {
     if (await checkInternet()) {
       // print(user.toJson());
       var response;
@@ -47,6 +51,34 @@ class AuthenticationRepoImpl implements AuthenticationRepo {
         } else {
           return Left(ServeurFailure(errorsMessage: "Invalid token received"));
         }
+      } catch (e) {
+        if (e is DioException) {
+          return Left(ServeurFailure.fromDioError(e));
+        }
+        return Left(ServeurFailure(errorsMessage: e.toString()));
+      }
+    } else {
+      return Left(ServeurFailure(errorsMessage: "No Internet Connection"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateStatustoActive() async {
+    if (await checkInternet()) {
+      // print(user.toJson());
+      var response;
+      try {
+        response = await dio.patch(
+          Applink.apiUpdateStatusUser,
+          data: jsonEncode(true),
+          options: Options(
+            headers: {
+              "Authorization":
+                  "Bearer ${infoUserSharedPreferences.getString("token")}",
+            },
+          ),
+        );
+        return Right(null);
       } catch (e) {
         if (e is DioException) {
           return Left(ServeurFailure.fromDioError(e));

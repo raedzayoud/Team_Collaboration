@@ -19,4 +19,17 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(SettingsFailure(message: e.toString()));
     }
   }
+
+  Future<void> updateStatustoInActive() async {
+    try {
+      //emit(SettingsLoading());
+      final result = await settingsRepos.updateStatustoInActive();
+      // result.fold(
+      //   (failure) => emit(SettingsFailure(message: failure.errorMessage)),
+      //   (success) => emit(SettingsSuccess()),
+      // );
+    } on Exception catch (e) {
+      emit(SettingsFailure(message: e.toString()));
+    }
+  }
 }
