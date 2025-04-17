@@ -11,6 +11,8 @@ import 'package:collab_doc/feature/meetings/data/repos/metting_repos_impl.dart';
 import 'package:collab_doc/feature/meetings/presentation/manger/cubit/mettings_cubit.dart';
 import 'package:collab_doc/feature/settings/data/repos/settings_repos_impl.dart';
 import 'package:collab_doc/feature/settings/presentation/manager/cubit/settings_cubit.dart';
+import 'package:collab_doc/feature/teams/data/repos/teams_repo_impl.dart';
+import 'package:collab_doc/feature/teams/presentation/manager/cubit/team_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -38,6 +40,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) => AuthenticationCubit(AuthenticationRepoImpl())),
         BlocProvider(create: (context) => HomeCubit(HomeReposImpl())),
+        BlocProvider(create: (context) => TeamCubit(TeamsRepoImpl())),
         BlocProvider(
           create: (context) => SettingsCubit(SettingsReposImpl()),
         )

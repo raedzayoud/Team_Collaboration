@@ -1,6 +1,7 @@
 import 'package:collab_doc/core/utils/function/snackbar.dart';
 import 'package:collab_doc/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/content_body_login.dart';
+import 'package:collab_doc/feature/home/presentation/manager/cubit/home_cubit.dart';
 import 'package:collab_doc/main.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
             infoUserSharedPreferences.setString("token", state.token);
             BlocProvider.of<AuthenticationCubit>(context)
                 .updateStatustoActive();
+            BlocProvider.of<HomeCubit>(context).getUserDetails();
             Navigator.of(context)
                 .pushNamedAndRemoveUntil("home", (route) => false);
           }

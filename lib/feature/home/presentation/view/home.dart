@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    BlocProvider.of<HomeCubit>(context).getUserDetails();
+    //BlocProvider.of<HomeCubit>(context).getUserDetails();
     _loadDocuments();
     super.initState();
   }
