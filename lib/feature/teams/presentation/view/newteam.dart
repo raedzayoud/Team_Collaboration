@@ -66,10 +66,14 @@ class _NewteamState extends State<Newteam> {
         elevation: 2,
       ),
       body: BlocListener<TeamCubit, TeamState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is TeamSuccess) {
             snackbarsuccess(context, "Team created successfully!");
-            Navigator.pop(context);
+            teamNameController.clear();
+            descriptionController.clear();
+            nbreController.clear();
+            await BlocProvider.of<TeamCubit>(context).getAllMyTeam();
+            // Navigator.pop(context);
           } else if (state is TeamFailure) {
             snackbarerror(context, state.errorsMessage);
           }

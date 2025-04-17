@@ -32,7 +32,7 @@ class BuildteamOwnRow extends StatelessWidget {
           child: ListTile(
               title:
                   Text(teamName, style: TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Text(members)),
+              subtitle: Text(members+" members")),
         ),
         Container(
             width: 70,

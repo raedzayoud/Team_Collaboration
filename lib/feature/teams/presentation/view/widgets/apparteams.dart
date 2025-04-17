@@ -24,7 +24,7 @@ class ApparTeams extends StatelessWidget implements PreferredSizeWidget {
             labelColor: Colors.black,
             unselectedLabelColor: Colors.grey,
             tabs: [
-              Tab(text: "My Teams"),
+              Tab(text: "Team Member"),
               Tab(text: "Teams | Own"),
             ],
           ),

@@ -5,7 +5,7 @@ class Team {
   final String name;
   final String description;
   final int maxMembers;
-  final UserDetails userOwner;
+  final UserDetails? userOwner;
   final List<UserDetails> members;
 
   Team({
@@ -19,14 +19,17 @@ class Team {
 
   factory Team.fromJson(Map<String, dynamic> json) {
     return Team(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      maxMembers: json['maxMembers'],
-      userOwner: UserDetails.fromJson(json['userOwner']),
-      members: (json['members'] as List)
-          .map((member) => UserDetails.fromJson(member))
-          .toList(),
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      maxMembers: json['maxMembers'] ?? 0,
+      userOwner: json['userOwner'] != null
+          ? UserDetails.fromJson(json['userOwner'])
+          : null,
+      members: (json['members'] as List?)
+              ?.map((member) => UserDetails.fromJson(member))
+              .toList() ??
+          [],
     );
   }
 }
