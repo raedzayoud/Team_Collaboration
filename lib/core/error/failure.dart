@@ -55,7 +55,10 @@ class ServeurFailure extends Failure {
           errorsMessage: "Your request was not found, please try later!");
     } else if (statusCode == 500) {
       final message = response.toString();
-      if (message.contains("User not found with this username")) {
+
+      if (message.contains("team name already exist")) {
+        return ServeurFailure(errorsMessage: "team name already exist");
+      } else if (message.contains("User not found with this username")) {
         return ServeurFailure(errorsMessage: "Your username is not correct.");
       } else if (message.contains("Les identifications sont erronées")) {
         return ServeurFailure(errorsMessage: "Your password is not correct.");

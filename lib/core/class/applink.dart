@@ -5,4 +5,6 @@ class Applink {
    static const String apiUserDetails = '$loaclhost/api/v1/users/my';
    static const String apiModifyUser = '$loaclhost/api/v1/users';
    static const String apiUpdateStatusUser = '$loaclhost/api/v1/users/updatestatus';
+   static const String apiAddTeam = '$loaclhost/api/v1/team';
+   static const String apiGetMyteam = '$loaclhost/api/v1/team/myteam';
 }
