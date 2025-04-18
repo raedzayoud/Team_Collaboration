@@ -1,6 +1,8 @@
 import 'package:collab_doc/constant.dart';
 import 'package:collab_doc/feature/invitation/data/mdoel/invitation.dart';
+import 'package:collab_doc/feature/invitation/presentation/manager/cubit/invitation_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CardReponse extends StatelessWidget {
   const CardReponse({
@@ -47,7 +49,9 @@ class CardReponse extends StatelessWidget {
               children: [
                 ElevatedButton.icon(
                   onPressed: () {
-                    // Accept action — add logic here
+                    BlocProvider.of<InvitationCubit>(context)
+                        .acceptInvitation(invitation.id!);
+                        
                   },
                   icon: const Icon(Icons.check_circle, color: Colors.white),
                   label: const Text("Accept"),
@@ -61,7 +65,8 @@ class CardReponse extends StatelessWidget {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
-                    // Reject action — add logic here
+                    BlocProvider.of<InvitationCubit>(context)
+                        .rejectInvitation(invitation.id!);
                   },
                   icon: const Icon(Icons.cancel, color: Colors.white),
                   label: const Text("Reject"),

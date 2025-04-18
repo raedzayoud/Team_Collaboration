@@ -5,6 +5,7 @@ import 'package:collab_doc/feature/invitation/presentation/manager/cubit/invitat
 import 'package:collab_doc/feature/invitation/presentation/view/widgets/cardreponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 class Responses extends StatefulWidget {
   const Responses({super.key});
 
@@ -13,8 +14,6 @@ class Responses extends StatefulWidget {
 }
 
 class _ResponsesState extends State<Responses> {
-  List<InvitationModel> invitations = [];
-
   @override
   void initState() {
     super.initState();
@@ -37,21 +36,20 @@ class _ResponsesState extends State<Responses> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
       ),
-      body: BlocListener<InvitationCubit, InvitationState>(
+      body: BlocConsumer<InvitationCubit, InvitationState>(
         listener: (context, state) {
           if (state is InvitationFailure) {
-            snackbarsuccess(context, state.errorMessage!);
-          } else if (state is InvitationSuccess) {
-            invitations = state.invitations!;
-            setState(() {});
+            snackbarsuccess(
+                context, state.errorMessage ?? 'An error occurred.');
           }
         },
-        child: BlocBuilder<InvitationCubit, InvitationState>(
-          builder: (context, state) {
-            if (state is InvitationLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
+        builder: (context, state) {
+          if (state is InvitationLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
+          if (state is InvitationSuccess) {
+            final invitations = state.invitations ?? [];
             if (invitations.isEmpty) {
               return const Center(
                 child: Text("No invitations received."),
@@ -62,12 +60,18 @@ class _ResponsesState extends State<Responses> {
               padding: const EdgeInsets.all(16),
               itemCount: invitations.length,
               itemBuilder: (context, index) {
-                final invitation = invitations[index];
-                return CardReponse(invitation: invitation);
+                if (invitations[index].status == "PENDING") {
+                  return CardReponse(invitation: invitations[index]);
+                } else {
+                  return const SizedBox
+                      .shrink(); // Rien afficher pour les autres
+                }
               },
             );
-          },
-        ),
+          }
+
+          return const Center(child: Text("No data available."));
+        },
       ),
     );
   }
