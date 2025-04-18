@@ -1,5 +1,13 @@
 import 'package:collab_doc/constant.dart';
+import 'package:collab_doc/core/utils/function/snackbar.dart';
+import 'package:collab_doc/core/utils/function/validator.dart';
+import 'package:collab_doc/core/utils/responsive.dart';
+import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_text_field.dart';
+import 'package:collab_doc/feature/invitation/presentation/manager/cubit/invitation_cubit.dart';
+import 'package:collab_doc/feature/teams/data/model/team.dart';
+import 'package:collab_doc/feature/teams/presentation/manager/cubit/team_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Request extends StatefulWidget {
   const Request({super.key});
@@ -9,22 +17,16 @@ class Request extends StatefulWidget {
 }
 
 class _RequestState extends State<Request> {
-  final TextEditingController _searchController = TextEditingController();
-  List<String> allTeams = ['Development Team', 'Marketing Team', 'Design Team'];
-  List<String> filteredTeams = [];
-  Set<String> selectedTeams = {};
-  void _filterTeams(String query) {
-    setState(() {
-      filteredTeams = allTeams
-          .where((team) => team.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    });
-  }
+  final TextEditingController controller = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  List<Team> allTeams = [];
+  Team? selectedTeam;
 
   @override
   void initState() {
-    filteredTeams = allTeams;
     super.initState();
+    BlocProvider.of<TeamCubit>(context).getAllMyTeam();
   }
 
   @override
@@ -32,13 +34,9 @@ class _RequestState extends State<Request> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            )),
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+        ),
         centerTitle: true,
         backgroundColor: KPrimayColor,
         title: const Text(
@@ -46,85 +44,131 @@ class _RequestState extends State<Request> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: _searchController,
-              onChanged: _filterTeams,
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                hintText: 'Search for teams...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12)
-                )
-              ),
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredTeams.length,
-                itemBuilder: (context, index) {
-                  String team = filteredTeams[index];
-                  return Card(
-                    margin: EdgeInsets.symmetric(vertical: 6),
-                    child: ListTile(
-                      leading: Checkbox(
-                        value: selectedTeams.contains(team),
-                        onChanged: (_) {
-                          setState(() {
-                            if (selectedTeams.contains(team)) {
-                              selectedTeams.remove(team);
-                            } else {
-                              selectedTeams.add(team);
-                            }
-                          });
+      body: BlocListener<TeamCubit, TeamState>(
+        listener: (context, state) {
+          if (state is MyTeamSuccess) {
+            setState(() {
+              allTeams = state.myteams;
+            });
+          } else if (state is MyTeamFailure) {
+            snackbarerror(context, state.errorsMessage);
+          }
+        },
+        child: BlocBuilder<TeamCubit, TeamState>(
+          builder: (context, state) {
+            if (state is MyTeamLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: allTeams.length,
+                        itemBuilder: (context, index) {
+                          final team = allTeams[index];
+                          return Card(
+                            margin: const EdgeInsets.symmetric(vertical: 6),
+                            child: ListTile(
+                              leading: Radio<Team>(
+                                value: team,
+                                groupValue: selectedTeam,
+                                onChanged: (Team? value) {
+                                  setState(() {
+                                    selectedTeam = value;
+                                  });
+                                },
+                                activeColor: KPrimayColor,
+                              ),
+                              title: Text(
+                                team.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                '${team.members.length} members',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          );
                         },
                       ),
-                      title: Text(team,style: TextStyle(
-                        fontWeight: FontWeight.bold
-                      ),),
-                      subtitle: Text(team == 'Development Team'
-                          ? '12 members'
-                          : '9 members',style: TextStyle(
-                            fontWeight: FontWeight.w300
-                          ),),
                     ),
-                  );
-                },
+                    SizedBox(height: AppResponsive.heigth(context) * .03),
+                    CustomTextField(
+                      controller: controller,
+                      hintText: "Enter the receiver's email",
+                      suffixIcon: const Icon(Icons.email_outlined),
+                      validator: (val) => validateEmail(val),
+                      obscureText: false,
+                      onChanged: (val) => setState(() {}),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ElevatedButton.icon(
-          onPressed: () {
-            // Handle send logic
-          },
-          icon: Icon(
-            Icons.send,
-            color: Colors.white,
-          ),
-          label: Text(
-            "Send Invitations",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
+      bottomNavigationBar: BlocConsumer<InvitationCubit, InvitationState>(
+        listener: (context, state) {
+          if (state is InvitationSuccess) {
+            snackbarerror(
+              context,
+              "Invitation sent to ${controller.text} for team '${selectedTeam!.name}'!",
+            );
+            controller.clear();
+            setState(() {
+              selectedTeam = null;
+            });
+          } else if (state is InvitationFailure) {
+            snackbarerror(context, state.errorMessage!);
+          }
+        },
+        builder: (context, state) {
+          final isDisabled = (selectedTeam == null || controller.text.isEmpty);
+
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton.icon(
+              onPressed: isDisabled
+                  ? null
+                  : () {
+                      if (_formKey.currentState!.validate()) {
+                        BlocProvider.of<InvitationCubit>(context)
+                            .sendInvitation(
+                          controller.text,
+                          selectedTeam!.id,
+                        );
+                      }
+                    },
+              icon: state is InvitationLoading
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.white))
+                  : const Icon(Icons.send, color: Colors.white),
+              label: Text(
+                state is InvitationLoading ? "Sending..." : "Send Invitation",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: KPrimayColor,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
             ),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: KPrimayColor,
-            minimumSize: Size(double.infinity, 50),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

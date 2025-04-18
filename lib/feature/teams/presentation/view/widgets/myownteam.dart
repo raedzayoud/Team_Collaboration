@@ -66,7 +66,7 @@ class _MyOwnTeamState extends State<MyOwnTeam> {
                     },
                   ),
                 ),
-                Spacer(),
+                //Spacer(),
                 MaterialButton(
                   minWidth: double.infinity,
                   padding: EdgeInsets.all(14),

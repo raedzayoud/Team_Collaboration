@@ -7,6 +7,9 @@ import 'package:collab_doc/feature/home/data/repos/home_repos_impl.dart';
 import 'package:collab_doc/feature/home/presentation/manager/cubit/home_cubit.dart';
 import 'package:collab_doc/feature/home/presentation/view/home_screen_view.dart';
 import 'package:collab_doc/core/utils/router.dart';
+import 'package:collab_doc/feature/invitation/data/repos/invitation_repo.dart';
+import 'package:collab_doc/feature/invitation/data/repos/invitation_repo_impl.dart';
+import 'package:collab_doc/feature/invitation/presentation/manager/cubit/invitation_cubit.dart';
 import 'package:collab_doc/feature/meetings/data/repos/metting_repos_impl.dart';
 import 'package:collab_doc/feature/meetings/presentation/manger/cubit/mettings_cubit.dart';
 import 'package:collab_doc/feature/settings/data/repos/settings_repos_impl.dart';
@@ -41,6 +44,7 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthenticationCubit(AuthenticationRepoImpl())),
         BlocProvider(create: (context) => HomeCubit(HomeReposImpl())),
         BlocProvider(create: (context) => TeamCubit(TeamsRepoImpl())),
+        BlocProvider(create: (context) => InvitationCubit(InvitationRepoImpl())),
         BlocProvider(
           create: (context) => SettingsCubit(SettingsReposImpl()),
         )

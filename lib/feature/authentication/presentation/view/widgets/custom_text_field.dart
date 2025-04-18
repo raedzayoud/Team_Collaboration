@@ -6,19 +6,21 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final Widget suffixIcon;
   final bool obscureText;
+  final void Function(String)? onChanged;
   const CustomTextField(
       {super.key,
       required this.controller,
       required this.hintText,
       required this.suffixIcon,
       required this.validator,
-      required this.obscureText});
+      required this.obscureText, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextFormField(
+        onChanged: onChanged,
         keyboardType: hintText == "Enter your phone" || hintText == "nbre of members" ? TextInputType.number : null,
         obscureText: obscureText,
         validator: validator,
