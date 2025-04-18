@@ -14,7 +14,7 @@ class InvitationRepoImpl implements InvitationRepo {
       // print(user.toJson());
       var response;
       try {
-        response = await dio.patch(
+        response = await dio.post(
           Applink.apiSendInvitation,
           data: {
             "emailReceiver": emailReciver,

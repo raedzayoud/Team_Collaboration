@@ -1,5 +1,6 @@
 import 'package:collab_doc/constant.dart';
 import 'package:collab_doc/core/utils/function/snackbar.dart';
+import 'package:collab_doc/core/utils/function/successsnackbar.dart';
 import 'package:collab_doc/core/utils/function/validator.dart';
 import 'package:collab_doc/core/utils/responsive.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/widgets/custom_text_field.dart';
@@ -117,7 +118,7 @@ class _RequestState extends State<Request> {
       bottomNavigationBar: BlocConsumer<InvitationCubit, InvitationState>(
         listener: (context, state) {
           if (state is InvitationSuccess) {
-            snackbarerror(
+            snackbarsuccess(
               context,
               "Invitation sent to ${controller.text} for team '${selectedTeam!.name}'!",
             );

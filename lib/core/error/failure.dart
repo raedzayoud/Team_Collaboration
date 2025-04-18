@@ -55,8 +55,10 @@ class ServeurFailure extends Failure {
           errorsMessage: "Your request was not found, please try later!");
     } else if (statusCode == 500) {
       final message = response.toString();
-
-      if (message.contains("team name already exist")) {
+      if (message.contains("user Receiver  not found with this mail")) {
+        return ServeurFailure(
+            errorsMessage: " This user is not found in the database.");
+      } else if (message.contains("team name already exist")) {
         return ServeurFailure(errorsMessage: "team name already exist");
       } else if (message.contains("User not found with this username")) {
         return ServeurFailure(errorsMessage: "Your username is not correct.");
