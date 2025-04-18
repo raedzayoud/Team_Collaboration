@@ -5,7 +5,10 @@ sealed class InvitationState {}
 
 final class InvitationInitial extends InvitationState {}
 final class InvitationLoading extends InvitationState {}
-final class InvitationSuccess extends InvitationState {}
+final class InvitationSuccess extends InvitationState {
+  final List<InvitationModel>? invitations;
+  InvitationSuccess({this.invitations});
+}
 final class InvitationFailure extends InvitationState {
   final String? errorMessage;
 
