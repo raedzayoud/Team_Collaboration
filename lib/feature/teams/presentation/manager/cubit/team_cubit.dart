@@ -35,4 +35,17 @@ class TeamCubit extends Cubit<TeamState> {
       emit(TeamFailure(errorsMessage: e.toString()));
     }
   }
+
+  Future<void>getAllMyTeamAsmemeber()async{
+    try {
+      emit(MyTeamLoading());
+      final result =
+          await teamsRepo.getMyTeamsAsMemeber();
+      result.fold(
+          (failure) => emit(MyTeamFailure(errorsMessage: failure.errorMessage)),
+          (success) => emit(MyTeamSuccess(myteams: success)));
+    } catch (e) {
+      emit(TeamFailure(errorsMessage: e.toString()));
+    }
+  }
 }

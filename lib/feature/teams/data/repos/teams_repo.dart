@@ -6,6 +6,7 @@ abstract class TeamsRepo {
   
   Future<Either<Failure,void>> addNewTeam(String teamName, String teamDescription, String maxteamMembers);
   Future<Either<Failure,List<Team>>> getMyTeams();
+  Future<Either<Failure,List<Team>>> getMyTeamsAsMemeber();
 
 
 }

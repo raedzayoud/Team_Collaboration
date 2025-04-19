@@ -11,4 +11,5 @@ class Applink {
    static const String apiMyInvitationIrecived = '$loaclhost/api/v1/invitation/tome';
    static const String apiTeamDetailsById = '$loaclhost/api/v1/team/';
    static const String apiUserDetailsById = '$loaclhost/api/v1/users/';
+   static const String apiGetTheTeamAsMemeber = '$loaclhost/api/v1/team/asmember';
 }
