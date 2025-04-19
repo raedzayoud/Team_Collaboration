@@ -42,7 +42,7 @@ class invitations extends StatelessWidget {
           ),
           Text(team[index],
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 color: Colors.white,
               )),
           Spacer(),
@@ -50,8 +50,8 @@ class invitations extends StatelessWidget {
             onPressed: () {
               team[index] == "Invitations Request"
                   ? Navigator.of(context).pushNamed("request")
-                  : team[index] == "Pending | Accepted | Rejected"
-                      ? Navigator.of(context).pushNamed("pending")
+                  // : team[index] == "Pending | Accepted | Rejected"
+                  //     ? Navigator.of(context).pushNamed("pending")
                       : Navigator.of(context).pushNamed("response");
             },
             icon: Icon(

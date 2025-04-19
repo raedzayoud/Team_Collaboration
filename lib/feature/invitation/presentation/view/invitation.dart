@@ -14,7 +14,7 @@ class Invitation extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> team = [
       "Invitations Request",
-      "Pending | Accepted | Rejected",
+      
       "Invitations Response"
     ];
     return Scaffold(

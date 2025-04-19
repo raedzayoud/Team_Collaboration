@@ -79,7 +79,7 @@ class InvitationRepoImpl implements InvitationRepo {
       try {
         response = await dio.patch(
           Applink.apiInvitation,
-          data: {"invitationId": Invitationid, "status": "ACCEPTED"},
+          data: {"invitationId": Invitationid, "status": "REJECTED"},
           options: Options(
             headers: {
               "Authorization":

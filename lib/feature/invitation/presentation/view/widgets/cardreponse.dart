@@ -1,4 +1,6 @@
 import 'package:collab_doc/constant.dart';
+import 'package:collab_doc/core/utils/function/snackbar.dart';
+import 'package:collab_doc/core/utils/function/successsnackbar.dart';
 import 'package:collab_doc/feature/invitation/data/mdoel/invitation.dart';
 import 'package:collab_doc/feature/invitation/presentation/manager/cubit/invitation_cubit.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +53,10 @@ class CardReponse extends StatelessWidget {
                   onPressed: () {
                     BlocProvider.of<InvitationCubit>(context)
                         .acceptInvitation(invitation.id!);
-                        
+                    snackbarsuccess(
+                      context,
+                      "Invitation accepted successfully.",
+                    );
                   },
                   icon: const Icon(Icons.check_circle, color: Colors.white),
                   label: const Text("Accept"),
@@ -67,6 +72,7 @@ class CardReponse extends StatelessWidget {
                   onPressed: () {
                     BlocProvider.of<InvitationCubit>(context)
                         .rejectInvitation(invitation.id!);
+                    snackbarerror(context, "Invitation rejected successfully");
                   },
                   icon: const Icon(Icons.cancel, color: Colors.white),
                   label: const Text("Reject"),
