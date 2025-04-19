@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:collab_doc/feature/home/data/model/userdetails.dart';
 import 'package:collab_doc/feature/invitation/data/mdoel/invitation.dart';
 import 'package:collab_doc/feature/invitation/data/repos/invitation_repo.dart';
+import 'package:collab_doc/feature/teams/data/model/team.dart';
 import 'package:meta/meta.dart';
 
 part 'invitation_state.dart';
@@ -59,6 +61,32 @@ class InvitationCubit extends Cubit<InvitationState> {
       );
     } catch (e) {
       emit(InvitationFailure(errorMessage: e.toString()));
+    }
+  }
+
+  Future<Team> getTeamDetailsById(int idTeam) async {
+    try {
+      final result = await invitationRepo.getTeamDetailsById(idTeam);
+      return result.fold(
+        (failure) => throw Exception(failure.errorMessage),
+        (success) => success,
+      );
+    } catch (e) {
+      emit(InvitationFailure(errorMessage: e.toString()));
+      throw Exception('Failed to fetch team details: ${e.toString()}');
+    }
+  }
+
+  Future<UserDetails> getUserDetailsById(int idUser) async {
+    try {
+      final result = await invitationRepo.getUserDetailsById(idUser);
+      return result.fold(
+        (failure) => throw Exception(failure.errorMessage),
+        (success) => success,
+      );
+    } catch (e) {
+      emit(InvitationFailure(errorMessage: e.toString()));
+      throw Exception('Failed to fetch UserDetails details: ${e.toString()}');
     }
   }
 }
