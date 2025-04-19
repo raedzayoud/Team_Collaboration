@@ -1,18 +1,44 @@
 import 'package:collab_doc/constant.dart';
 import 'package:collab_doc/core/utils/function/snackbar.dart';
 import 'package:collab_doc/core/utils/function/successsnackbar.dart';
+import 'package:collab_doc/feature/home/data/model/userdetails.dart';
 import 'package:collab_doc/feature/invitation/data/mdoel/invitation.dart';
 import 'package:collab_doc/feature/invitation/presentation/manager/cubit/invitation_cubit.dart';
+import 'package:collab_doc/feature/teams/data/model/team.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CardReponse extends StatelessWidget {
+class CardReponse extends StatefulWidget {
   const CardReponse({
     super.key,
     required this.invitation,
   });
 
   final InvitationModel invitation;
+
+  @override
+  State<CardReponse> createState() => _CardReponseState();
+}
+
+class _CardReponseState extends State<CardReponse> {
+  Team? teamDetails;
+  UserDetails? userDetails;
+  @override
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    teamDetails = await BlocProvider.of<InvitationCubit>(context)
+        .getTeamDetailsById(widget.invitation.teamId!);
+
+    userDetails = await BlocProvider.of<InvitationCubit>(context)
+        .getUserDetailsById(widget.invitation.userSenderId!);
+
+    setState(() {}); // to rebuild with loaded data
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +59,14 @@ class CardReponse extends StatelessWidget {
                 child: Icon(Icons.group, color: KPrimayColor),
               ),
               title: Text(
-                "Team ID: ${invitation.teamId}",
+                "Team: ${teamDetails?.name}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               subtitle: Text(
-                "User ${invitation.userSenderId} invited you to join",
+                "Owner ${userDetails?.username} invited you to join",
                 style: const TextStyle(color: Colors.grey),
               ),
               trailing: const Icon(Icons.more_vert),
@@ -52,7 +78,7 @@ class CardReponse extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () {
                     BlocProvider.of<InvitationCubit>(context)
-                        .acceptInvitation(invitation.id!);
+                        .acceptInvitation(widget.invitation.id!);
                     snackbarsuccess(
                       context,
                       "Invitation accepted successfully.",
@@ -71,7 +97,7 @@ class CardReponse extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () {
                     BlocProvider.of<InvitationCubit>(context)
-                        .rejectInvitation(invitation.id!);
+                        .rejectInvitation(widget.invitation.id!);
                     snackbarerror(context, "Invitation rejected successfully");
                   },
                   icon: const Icon(Icons.cancel, color: Colors.white),

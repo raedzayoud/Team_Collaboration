@@ -136,7 +136,7 @@ class InvitationRepoImpl implements InvitationRepo {
       var response;
       try {
         response = await dio.get(
-          Applink.apiTeamDetailsById+"/"+idTeam.toString(),
+          Applink.apiTeamDetailsById+idTeam.toString(),
           options: Options(
             headers: {
               "Authorization":
@@ -163,7 +163,7 @@ class InvitationRepoImpl implements InvitationRepo {
       var response;
       try {
         response = await dio.get(
-          Applink.apiUserDetailsById+"/"+idUser.toString(),
+          Applink.apiUserDetailsById+idUser.toString(),
           options: Options(
             headers: {
               "Authorization":

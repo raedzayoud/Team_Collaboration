@@ -9,7 +9,7 @@ part 'invitation_state.dart';
 
 class InvitationCubit extends Cubit<InvitationState> {
   final InvitationRepo invitationRepo;
-  
+
   InvitationCubit(this.invitationRepo) : super(InvitationInitial());
 
   void sendInvitation(String emailReciver, int teamid) async {
@@ -17,7 +17,8 @@ class InvitationCubit extends Cubit<InvitationState> {
     try {
       final result = await invitationRepo.sendInvitation(emailReciver, teamid);
       result.fold(
-        (failure) => emit(InvitationFailure(errorMessage: failure.errorMessage)),
+        (failure) =>
+            emit(InvitationFailure(errorMessage: failure.errorMessage)),
         (_) => emit(InvitationSuccess(invitations: null)),
       );
     } catch (e) {
@@ -30,7 +31,8 @@ class InvitationCubit extends Cubit<InvitationState> {
     try {
       final result = await invitationRepo.myInvitationIrecived();
       result.fold(
-        (failure) => emit(InvitationFailure(errorMessage: failure.errorMessage)),
+        (failure) =>
+            emit(InvitationFailure(errorMessage: failure.errorMessage)),
         (success) => emit(InvitationSuccess(invitations: success)),
       );
     } catch (e) {
@@ -43,7 +45,8 @@ class InvitationCubit extends Cubit<InvitationState> {
     try {
       final result = await invitationRepo.acceptInvitation(invitationId);
       result.fold(
-        (failure) => emit(InvitationFailure(errorMessage: failure.errorMessage)),
+        (failure) =>
+            emit(InvitationFailure(errorMessage: failure.errorMessage)),
         (_) => myInvitationIrecived(), // Refresh list after action
       );
     } catch (e) {
@@ -56,7 +59,8 @@ class InvitationCubit extends Cubit<InvitationState> {
     try {
       final result = await invitationRepo.rejectInvitation(invitationId);
       result.fold(
-        (failure) => emit(InvitationFailure(errorMessage: failure.errorMessage)),
+        (failure) =>
+            emit(InvitationFailure(errorMessage: failure.errorMessage)),
         (_) => myInvitationIrecived(), // Refresh list after action
       );
     } catch (e) {
@@ -73,7 +77,15 @@ class InvitationCubit extends Cubit<InvitationState> {
       );
     } catch (e) {
       emit(InvitationFailure(errorMessage: e.toString()));
-      throw Exception('Failed to fetch team details: ${e.toString()}');
+      //throw Exception('Failed to fetch team details: ${e.toString()}');
+      return Team(
+        id: 0,
+        name: '',
+        description: '',
+        maxMembers: 0,
+        userOwner: null, // Provide default UserDetails
+        members: [], // Provide an empty list for members
+      ); // Return an empty Team object or handle it as needed
     }
   }
 
@@ -86,7 +98,13 @@ class InvitationCubit extends Cubit<InvitationState> {
       );
     } catch (e) {
       emit(InvitationFailure(errorMessage: e.toString()));
-      throw Exception('Failed to fetch UserDetails details: ${e.toString()}');
+      // throw Exception('Failed to fetch UserDetails details: ${e.toString()}');
+      return UserDetails(
+          id: 0,
+          email: '',
+          active: false,
+          username:
+              ""); // Return an empty UserDetails object or handle it as needed
     }
   }
 }
