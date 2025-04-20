@@ -32,6 +32,7 @@ void main() async {
   options: DefaultFirebaseOptions.currentPlatform,
 );
   runApp(const MyApp());
+  print("Firebase initialized successfully");
 }
 
 class MyApp extends StatelessWidget {
