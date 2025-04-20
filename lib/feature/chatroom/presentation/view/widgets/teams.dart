@@ -1,14 +1,13 @@
 import 'package:collab_doc/constant.dart';
 import 'package:collab_doc/core/utils/responsive.dart';
+import 'package:collab_doc/feature/teams/data/model/team.dart';
 import 'package:flutter/material.dart';
+class TeamWidget extends StatelessWidget {
+  final Team team;
 
-class teams extends StatelessWidget {
-  final int id;
-  final String? Teamname;
-  const teams({
+  const TeamWidget({
     super.key,
-    required this.Teamname,
-    required this.id,
+    required this.team,
   });
 
   @override
@@ -36,23 +35,20 @@ class teams extends StatelessWidget {
               size: 30,
             ),
           ),
-          SizedBox(
-            width: AppResponsive.width(context) * .02,
+          SizedBox(width: AppResponsive.width(context) * .02),
+          Text(
+            team.name,
+            style: TextStyle(fontSize: 20, color: Colors.white),
           ),
-          Text(Teamname!,
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              )),
           Spacer(),
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed("chat",arguments: id);
+              Navigator.of(context).pushNamed(
+                "chat",
+                arguments: team,
+              );
             },
-            icon: Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.white,
-            ),
+            icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
           ),
         ],
       ),

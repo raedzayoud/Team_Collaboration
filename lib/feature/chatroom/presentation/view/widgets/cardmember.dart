@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 class cardmemebers extends StatelessWidget {
   const cardmemebers({
     super.key,
-    required this.isAdmin,
     required this.name,
     required this.isConnected,
     required this.isOwner,
   });
   final bool isOwner;
-  final bool isAdmin;
   final String name;
   final bool isConnected;
 
@@ -53,23 +51,19 @@ class cardmemebers extends StatelessWidget {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-           // color: KPrimayColor,
+            // color: KPrimayColor,
           ),
         ),
         subtitle: Row(
           children: [
             Icon(
-              isAdmin || isOwner ? Icons.shield : Icons.group,
+              isOwner ? Icons.shield : Icons.group,
               color: KPrimayColor,
               size: 18,
             ),
             const SizedBox(width: 5),
             Text(
-              isOwner
-                  ? 'Owner'
-                  : isAdmin
-                      ? 'Admin'
-                      : 'Member',
+              isOwner ? 'Owner' : 'Member',
               style: TextStyle(
                 color: KPrimayColor,
                 fontWeight: FontWeight.w500,

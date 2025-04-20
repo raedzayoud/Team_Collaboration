@@ -1,8 +1,10 @@
 import 'package:collab_doc/constant.dart';
+import 'package:collab_doc/feature/teams/data/model/team.dart';
 import 'package:flutter/material.dart';
 
 class Apparchat extends StatelessWidget implements PreferredSizeWidget {
-  const Apparchat();
+  final Team team;
+  const Apparchat(this.team, {super.key});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -13,7 +15,7 @@ class Apparchat extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed("members");
+              Navigator.of(context).pushNamed("members", arguments: team);
             },
             icon: Icon(
               Icons.info_outline,
