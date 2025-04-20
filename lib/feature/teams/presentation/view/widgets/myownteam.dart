@@ -42,30 +42,37 @@ class _MyOwnTeamState extends State<MyOwnTeam> {
                   Center(
                     child: Text(
                       "No teams found",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 if (MyteamList.isNotEmpty)
-                Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: MyteamList.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          BuildteamOwnRow(
-                            teamName: MyteamList[index].name,
-                            role: "Owner",
-                            members:
-                                MyteamList[index].members.length.toString(),
+                  Expanded(
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: MyteamList.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, 'teamdetails',
+                                arguments: MyteamList[index]);
+                          },
+                          child: Column(
+                            children: [
+                              BuildteamOwnRow(
+                                teamName: MyteamList[index].name,
+                                role: "Owner",
+                                members:
+                                    MyteamList[index].members.length.toString(),
+                              ),
+                              Divider(),
+                              SizedBox(height: 10),
+                            ],
                           ),
-                          Divider(),
-                          SizedBox(height: 10),
-                        ],
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
                 //Spacer(),
                 MaterialButton(
                   minWidth: double.infinity,

@@ -1,6 +1,8 @@
 import 'package:collab_doc/feature/authentication/data/repos/authentication_repo_impl.dart';
 import 'package:collab_doc/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:collab_doc/feature/authentication/presentation/view/login_view.dart';
+import 'package:collab_doc/feature/chatroom/data/repos/chatroom_repo_impl.dart';
+import 'package:collab_doc/feature/chatroom/presentation/manager/cubit/chatroom_cubit.dart';
 import 'package:collab_doc/feature/document/data/repos/document_repos_impl.dart';
 import 'package:collab_doc/feature/document/prenstation/manager/cubit/document_cubit.dart';
 import 'package:collab_doc/feature/home/data/repos/home_repos_impl.dart';
@@ -49,6 +51,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => HomeCubit(HomeReposImpl())),
         BlocProvider(create: (context) => TeamCubit(TeamsRepoImpl())),
         BlocProvider(create: (context) => InvitationCubit(InvitationRepoImpl())),
+        BlocProvider(create: (context) => ChatroomCubit(ChatroomRepoImpl())),
         BlocProvider(
           create: (context) => SettingsCubit(SettingsReposImpl()),
         )

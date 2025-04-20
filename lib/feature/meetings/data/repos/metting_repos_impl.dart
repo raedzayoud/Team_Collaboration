@@ -1,4 +1,5 @@
 import 'package:collab_doc/feature/meetings/data/repos/meeting_repos.dart';
+import 'package:collab_doc/main.dart';
 import 'package:jitsi_meet_flutter_sdk/jitsi_meet_flutter_sdk.dart';
 
 class MettingReposImpl implements MeetingRepos {
@@ -14,8 +15,8 @@ class MettingReposImpl implements MeetingRepos {
           "startWithVideoMuted": true,
         },
         userInfo: JitsiMeetUserInfo(
-          displayName: "raed",
-          email: "raed@gmail.com",
+          displayName: infoUserSharedPreferences.getString("username") ?? "",
+          email: infoUserSharedPreferences.getString("email") ?? "",
         ),
       );
       await jitsiMeet.join(options);
