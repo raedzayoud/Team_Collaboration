@@ -1,7 +1,6 @@
-import 'dart:ffi';
 
 class UserConnected {
-  final Long id;
+  final int id;
   final String username;
   final String email;
   final bool isActive;

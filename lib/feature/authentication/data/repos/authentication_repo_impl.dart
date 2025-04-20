@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:collab_doc/core/class/UserConnected.dart';
 import 'package:collab_doc/core/class/applink.dart';
@@ -60,7 +61,7 @@ class AuthenticationRepoImpl implements AuthenticationRepo {
           Userprefrences.saveUserToPrefs(UserConnected(
               email: response.data['email'],
               id: response.data['id'],
-              isActive: response.data['isActive'],
+              isActive: response.data['isActive'] ?? false,
               username: response.data['username']));
 
           return Right(token);
