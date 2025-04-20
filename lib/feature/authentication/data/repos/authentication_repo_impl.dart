@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:ffi';
 
+import 'package:collab_doc/core/class/UserConnected.dart';
 import 'package:collab_doc/core/class/applink.dart';
 import 'package:collab_doc/core/error/failure.dart';
 import 'package:collab_doc/core/utils/function/checkinternet.dart';
+import 'package:collab_doc/core/utils/function/userPrefrences.dart';
 import 'package:collab_doc/feature/authentication/data/model/user.dart';
 import 'package:collab_doc/feature/authentication/data/repos/authentication_repo.dart';
 import 'package:collab_doc/main.dart';
@@ -47,6 +50,20 @@ class AuthenticationRepoImpl implements AuthenticationRepo {
         String token = response.data['token'];
         if (token != null) {
           // Optionally: Save token in shared preferences or secure storage here
+          response = await dio.get(
+            Applink.apiUserDetails,
+            options: Options(
+              headers: {
+                "Authorization": "Bearer ${token}",
+              },
+            ),
+          );
+          Userprefrences.saveUserToPrefs(UserConnected(
+              email: response.data['email'],
+              id: response.data['id'],
+              isActive: response.data['isActive'] ?? false,
+              username: response.data['username']));
+
           return Right(token);
         } else {
           return Left(ServeurFailure(errorsMessage: "Invalid token received"));

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collab_doc/feature/chatroom/presentation/view/widgets/apparchat.dart';
 import 'package:collab_doc/feature/chatroom/presentation/view/widgets/buttonsmettings.dart';
 import 'package:collab_doc/feature/chatroom/presentation/view/widgets/messages.dart';
@@ -15,10 +16,13 @@ class _ChatroomState extends State<Chatroom> {
   int? id;
   List<Map<String, String>> messages = [];
   TextEditingController controller = TextEditingController();
-  void sendMessage() {
+  void sendMessage() async {
     if (!controller.text.isEmpty) {
       setState(() {});
       messages.insert(0, {"text": controller.text, "sender": "user"});
+      await FirebaseFirestore.instance
+          .collection("messages")
+          .add({"text": controller.text, "sender": "user"});
     }
     controller.clear();
   }
@@ -47,7 +51,10 @@ class _ChatroomState extends State<Chatroom> {
           Messages(
             messages: messages,
           ),
-          TextFieldMessage(controller: controller,onPressed: sendMessage,)
+          TextFieldMessage(
+            controller: controller,
+            onPressed: sendMessage,
+          )
         ],
       ),
     );
