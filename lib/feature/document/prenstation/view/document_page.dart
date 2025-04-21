@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:collab_doc/feature/document/prenstation/view/modification_history_screen.dart';
+import 'package:collab_doc/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -44,7 +46,6 @@ class _CRDTTextEditorState extends State<DocumentPage> {
         .delete();
   }
 
-  
   void _listenForUpdates() {
     _itemsSubscription = _db
         .collection("documents")
@@ -71,7 +72,7 @@ class _CRDTTextEditorState extends State<DocumentPage> {
         .orderBy("index", descending: false)
         .snapshots()
         .listen((snapshot) {
-      if (!mounted) return; 
+      if (!mounted) return;
 
       items =
           snapshot.docs.map((doc) => CRDTItem.fromJson(doc.data())).toList();
@@ -91,9 +92,9 @@ class _CRDTTextEditorState extends State<DocumentPage> {
         .join("");
   }
 
- 
   void _insertCharacter(String content) {
-    String id = "${DateTime.now().millisecondsSinceEpoch}@user";
+    final String username = sharedPreferences.getString("username") ?? " ";
+    String id = "${DateTime.now().millisecondsSinceEpoch}@${username}";
     double index = -1;
     bool test = false;
     String motAdded = "";
@@ -125,6 +126,7 @@ class _CRDTTextEditorState extends State<DocumentPage> {
       index = items.last.index + 1;
     }
     CRDTItem newItem = CRDTItem(
+        action: "add",
         index: index,
         id: id,
         content: motAdded,
@@ -145,6 +147,7 @@ class _CRDTTextEditorState extends State<DocumentPage> {
   }
 
   void _deleteCharacter() async {
+    final String username = sharedPreferences.getString("username") ?? " ";
     if (_controller.text.isEmpty) {
       for (var item in items) {
         if (item.isDeleted == false) {
@@ -153,7 +156,9 @@ class _CRDTTextEditorState extends State<DocumentPage> {
               .doc(widget.docId)
               .collection("items")
               .doc(item.id)
-              .update({"isDeleted": true});
+              .update({
+            "isDeleted": true,
+          });
         }
       }
       _db.collection("documents").doc(widget.docId);
@@ -215,14 +220,29 @@ class _CRDTTextEditorState extends State<DocumentPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("CRDT Text Editor")),
+      appBar: AppBar(title: const Text("CRDT Text Editor"), actions: [
+        ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      ModificationHistoryScreen(documentId: widget.docId),
+                ),
+              );
+            },
+            child: Text("history"))
+      ]),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               maxLines: 5,
-              decoration: const InputDecoration(),
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      borderSide: BorderSide(color: Colors.black))),
               controller: _controller,
               onChanged: (text) {
                 // calculateCharacterPositions();
@@ -234,29 +254,6 @@ class _CRDTTextEditorState extends State<DocumentPage> {
                   _deleteCharacter();
                 }
               },
-            ),
-            const SizedBox(height: 20),
-            const Text("Live Document:"),
-            Expanded(
-              child: StreamBuilder(
-                stream: _db
-                    .collection("documents")
-                    .doc(widget.docId)
-                    .collection("items")
-                    .where("isDeleted", isEqualTo: false)
-                    .orderBy("index", descending: false)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const CircularProgressIndicator();
-                  }
-                  List<CRDTItem> liveItems = snapshot.data!.docs
-                      .map((doc) => CRDTItem.fromJson(doc.data()))
-                      .toList();
-                  return Text(liveItems.map((e) => e.content).join(""),
-                      style: const TextStyle(fontSize: 18));
-                },
-              ),
             ),
           ],
         ),
@@ -272,8 +269,10 @@ class CRDTItem {
   final int timestamp;
   bool isDeleted;
   final double index;
+  final String action;
   CRDTItem(
       {required this.id,
+      required this.action,
       required this.index,
       required this.content,
       required this.timestamp,
@@ -284,9 +283,11 @@ class CRDTItem {
         'timestamp': timestamp,
         'isDeleted': isDeleted,
         'index': index,
+        'action': action
       };
   static CRDTItem fromJson(Map<String, dynamic> json) {
     return CRDTItem(
+      action: json['action'],
       id: json['id'],
       index: json['index'].toDouble(),
       content: json['content'],
