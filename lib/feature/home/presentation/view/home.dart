@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collab_doc/core/class/applink.dart';
 import 'package:collab_doc/core/utils/function/snackbar.dart';
 import 'package:collab_doc/feature/document/prenstation/view/addnewdocument.dart';
 import 'package:collab_doc/feature/home/presentation/manager/cubit/home_cubit.dart';
 import 'package:collab_doc/feature/home/presentation/view/widget/apparhome.dart';
 import 'package:collab_doc/feature/home/presentation/view/widget/texthome.dart';
 import 'package:collab_doc/main.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -17,7 +20,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Map<String, String>> documents = [];
+  List<Map<String, dynamic>> documents = [];
+  Dio dio = Dio();
 
   @override
   void initState() {
@@ -27,13 +31,48 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _loadDocuments() async {
-    List<String> savedDocs =
-        sharedPreferences.getStringList('saved_documents') ?? [];
+    final _firebase = FirebaseFirestore.instance;
+    var response = await dio.get(
+      Applink.apiGetTheTeamAsMemeber,
+      options: Options(
+        headers: {
+          "Authorization":
+              "Bearer ${infoUserSharedPreferences.getString("token")}",
+        },
+      ),
+    );
+    var response2 = await dio.get(
+      Applink.apiGetMyteam,
+      options: Options(
+        headers: {
+          "Authorization":
+              "Bearer ${infoUserSharedPreferences.getString("token")}",
+        },
+      ),
+    );
+    List<dynamic> teams = (response.data as List);
+    List<Map<String, dynamic>> listDocument = [];
+    for (var item in response2.data as List) {
+      teams.add(item);
+    }
+    //teams.add(response2.data as List);
+    print(teams);
+    for (var item in teams) {
+      //String? id = sharedPreferences.getString("id");
+      var res = await _firebase
+          .collection("document")
+          .where("idTeam", isEqualTo: item['id'])
+          .get();
+      List<String> list = [];
+
+      for (var a in res.docChanges) {
+        listDocument.add(a.doc.data()!['idDocument']);
+      }
+    }
+    print(listDocument);
 
     setState(() {
-      documents = savedDocs
-          .map((doc) => Map<String, String>.from(jsonDecode(doc)))
-          .toList();
+      documents = listDocument;
     });
   }
 
