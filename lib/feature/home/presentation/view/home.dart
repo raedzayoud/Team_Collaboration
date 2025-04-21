@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collab_doc/core/class/applink.dart';
 import 'package:collab_doc/core/utils/function/snackbar.dart';
 import 'package:collab_doc/feature/document/prenstation/view/addnewdocument.dart';
+import 'package:collab_doc/feature/document/prenstation/view/document_page.dart';
 import 'package:collab_doc/feature/home/presentation/manager/cubit/home_cubit.dart';
 import 'package:collab_doc/feature/home/presentation/view/widget/apparhome.dart';
 import 'package:collab_doc/feature/home/presentation/view/widget/texthome.dart';
@@ -99,7 +100,8 @@ class _HomeState extends State<Home> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddDocumentPage(content),
+        builder: (context) => /* AddDocumentPage(content)*/
+            DocumentPage(docId: content),
       ),
     );
   }
@@ -211,13 +213,14 @@ class _HomeState extends State<Home> {
                                 color: Colors.white,
                                 child: ListTile(
                                   title: Text("Document ${index + 1}"),
-                                  subtitle: Text("ID: ${doc['id']}"),
+                                  subtitle: Text("ID: ${doc['idDocument']}"),
                                   trailing: IconButton(
                                     icon: Icon(Icons.delete, color: Colors.red),
                                     onPressed: () =>
-                                        _deleteDocument(doc['id']!),
+                                        _deleteDocument(doc['idDocument']!),
                                   ),
-                                  onTap: () => _openDocument(doc['content']!),
+                                  onTap: () =>
+                                      _openDocument(doc['idDocument']!),
                                 ),
                               );
                             },
