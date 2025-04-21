@@ -6,6 +6,7 @@ import 'package:collab_doc/feature/document/prenstation/view/addnewdocument.dart
 import 'package:collab_doc/feature/home/presentation/manager/cubit/home_cubit.dart';
 import 'package:collab_doc/feature/home/presentation/view/widget/apparhome.dart';
 import 'package:collab_doc/feature/home/presentation/view/widget/texthome.dart';
+import 'package:collab_doc/feature/teams/data/model/team.dart';
 import 'package:collab_doc/main.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Map<String, dynamic>> documents = [];
+  List<Team> teams = [];
   Dio dio = Dio();
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -50,23 +53,25 @@ class _HomeState extends State<Home> {
         },
       ),
     );
-    List<dynamic> teams = (response.data as List);
-    List<Map<String, dynamic>> listDocument = [];
-    for (var item in response2.data as List) {
-      teams.add(item);
+    for (var item in response.data) {
+      teams.add(Team.fromJson(item));
     }
+
+    List<Map<String, dynamic>> listDocument = [];
+    for (var item in response2.data) {
+      teams.add(Team.fromJson(item));
+    }
+
     //teams.add(response2.data as List);
-    print(teams);
-    for (var item in teams) {
+    for (Team item in teams) {
       //String? id = sharedPreferences.getString("id");
       var res = await _firebase
-          .collection("document")
-          .where("idTeam", isEqualTo: item['id'])
+          .collection("documents")
+          .where("teamId", isEqualTo: item.id)
           .get();
-      List<String> list = [];
 
       for (var a in res.docChanges) {
-        listDocument.add(a.doc.data()!['idDocument']);
+        listDocument.add(a.doc.data()!);
       }
     }
     print(listDocument);
@@ -96,6 +101,68 @@ class _HomeState extends State<Home> {
       MaterialPageRoute(
         builder: (context) => AddDocumentPage(content),
       ),
+    );
+  }
+
+  void showAddDocumentDialog() {
+    final TextEditingController _titleController = TextEditingController();
+    Team? selectedTeam;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Add Document'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(labelText: 'Document Title'),
+              ),
+              DropdownButton<Team>(
+                hint: Text('Select Team'),
+                value: selectedTeam,
+                onChanged: (Team? newValue) {
+                  setState(() {
+                    selectedTeam = newValue;
+                  });
+                  // Needed to reflect selection inside the dialog
+                  (context as Element).markNeedsBuild();
+                },
+                items: teams.map((team) {
+                  return DropdownMenuItem(
+                    value: team,
+                    child: Text(team.name),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+            ElevatedButton(
+              child: Text('Save'),
+              onPressed: () async {
+                final title = _titleController.text.trim();
+                if (title.isNotEmpty && selectedTeam != null) {
+                  final docRef =
+                      FirebaseFirestore.instance.collection('documents').doc();
+                  await docRef.set({
+                    'idDocument': docRef.id,
+                    'titre': title,
+                    'teamId': selectedTeam!.id,
+                  });
+                  Navigator.pop(context);
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -165,10 +232,9 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         child: Icon(Icons.add),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AddDocumentPage("")),
-        ).then((_) => _loadDocuments()),
+        onPressed: () {
+          showAddDocumentDialog();
+        },
       ),
     );
   }
