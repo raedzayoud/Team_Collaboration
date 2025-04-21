@@ -1,5 +1,5 @@
 class Applink {
-   static const String loaclhost = 'http://192.168.70.159:8080';
+   static const String loaclhost = 'http://192.168.56.1:8080';
    static const String apiSignup = '$loaclhost/api/v1/users';
    static const String apiLogin = '$loaclhost/api/v1/auth/login';
    static const String apiUserDetails = '$loaclhost/api/v1/users/my';
