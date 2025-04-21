@@ -94,13 +94,6 @@ class _TeamdetailsState extends State<Teamdetails> {
             SizedBox(
               height: 10,
             ),
-            const Text(
-              "All Documents",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
           ],
         ),
       ),

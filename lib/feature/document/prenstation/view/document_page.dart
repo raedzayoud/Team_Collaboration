@@ -1,10 +1,15 @@
 import 'dart:async';
+import 'package:collab_doc/core/utils/function/snackbar.dart';
+import 'package:collab_doc/feature/document/prenstation/manager/cubit/document_cubit.dart';
 import 'package:collab_doc/feature/document/prenstation/view/modification_history_screen.dart';
+import 'package:collab_doc/feature/document/prenstation/view/widgets/showdialog_scissors.dart';
 import 'package:collab_doc/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:uuid/uuid.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class DocumentPage extends StatefulWidget {
   final String docId;
@@ -16,10 +21,12 @@ class DocumentPage extends StatefulWidget {
 
 class _CRDTTextEditorState extends State<DocumentPage> {
   var idd = const Uuid().v1();
+  stt.SpeechToText speechToText = stt.SpeechToText();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   String docId = "";
   final TextEditingController _controller = TextEditingController();
   final QuillController quillController = QuillController.basic();
+
   List<CRDTItem> items = [];
   int currentIndex = 0;
   StreamSubscription? _itemsSubscription;
@@ -27,6 +34,56 @@ class _CRDTTextEditorState extends State<DocumentPage> {
   void initState() {
     super.initState();
     _listenForUpdates();
+    init();
+  }
+
+  bool _speechEnalbled = false;
+  String _wordSpoken = "";
+
+  void startListening() async {
+    if (!_speechEnalbled) {
+      return;
+    }
+    await speechToText.listen(onResult: onSpeechResult);
+    setState(() {});
+  }
+
+  void onSpeechResult(result) {
+    setState(() {
+      _wordSpoken = "${result.recognizedWords}";
+    });
+
+    if (_wordSpoken.isNotEmpty) {
+      final selection = _controller.selection;
+
+      // If there's no valid cursor position, append to the end
+      int baseOffset =
+          selection.isValid ? _controller.text.length : selection.baseOffset;
+
+      // Insert the spoken text at the current cursor position
+      final newText = _controller.text.substring(0, baseOffset) +
+          "$_wordSpoken " +
+          _controller.text.substring(baseOffset);
+
+      _controller.value = TextEditingValue(
+        text: newText,
+        selection: TextSelection.collapsed(
+          offset: baseOffset +
+              _wordSpoken.length +
+              1, // Move cursor after inserted text
+        ),
+      );
+    }
+  }
+
+  void stopListening() async {
+    await speechToText.stop();
+    setState(() {});
+  }
+
+  void init() async {
+    _speechEnalbled = await speechToText.initialize();
+    setState(() {});
   }
 
   @override
@@ -237,23 +294,84 @@ class _CRDTTextEditorState extends State<DocumentPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
-              maxLines: 5,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      borderSide: BorderSide(color: Colors.black))),
-              controller: _controller,
-              onChanged: (text) {
-                // calculateCharacterPositions();
-                if (text.length > _getText().length) {
-                  currentIndex = _controller.selection.baseOffset;
-                  _insertCharacter(text);
-                } else if (text.length < _getText().length) {
-                  currentIndex = _controller.selection.baseOffset;
-                  _deleteCharacter();
+            BlocListener<DocumentCubit, DocumentState>(
+              listener: (context, state) {
+                if (state is DocumentFailure) {
+                  snackbarerror(context, state.errorMessage);
+                } else if (state is DocumentSuccess) {
+                  _controller.text = state.summary;
                 }
               },
+              child: BlocBuilder<DocumentCubit, DocumentState>(
+                builder: (context, state) {
+                  if (state is DocumentLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return TextField(
+                    maxLines: 5,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                            borderSide: BorderSide(color: Colors.black))),
+                    controller: _controller,
+                    onChanged: (text) {
+                      // calculateCharacterPositions();
+                      if (text.length > _getText().length) {
+                        currentIndex = _controller.selection.baseOffset;
+                        _insertCharacter(text);
+                      } else if (text.length < _getText().length) {
+                        currentIndex = _controller.selection.baseOffset;
+                        _deleteCharacter();
+                      }
+                    },
+                  );
+                },
+              ),
+            ),
+            Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    if (speechToText.isListening) {
+                      stopListening();
+                    } else {
+                      startListening();
+                    }
+                  },
+                  icon: Icon(
+                    speechToText.isNotListening ? Icons.mic_off : Icons.mic,
+                    color: Colors.black,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.content_cut_outlined),
+                  onPressed: () {
+                    showDialogScissors(
+                      context: context,
+                      textEditingController: _controller,
+                      onPressed: () {
+                        if (_controller.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Please enter text to summarize."),
+                            ),
+                          );
+                          Navigator.of(context).pop();
+                          return;
+                        }
+                        BlocProvider.of<DocumentCubit>(context).summarizeText(
+                          _controller.text,
+                        );
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),

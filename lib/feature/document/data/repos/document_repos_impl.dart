@@ -11,7 +11,7 @@ class DocumentReposImpl implements DocumentRepo {
           'https://api.nlpcloud.io/v1/t5-base-en-generate-headline/summarization');
 
       final headers = {
-        'Authorization': 'Token 71898a335a3c209aad689c4abb55b5dcde23f94a',
+        'Authorization': 'Token ad590be6d4cf7fdf8a284718a7071782108d0f5e',
         'Content-Type': 'application/json',
       };
 

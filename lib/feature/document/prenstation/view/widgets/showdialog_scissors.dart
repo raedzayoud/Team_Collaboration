@@ -4,10 +4,9 @@ import 'package:flutter_quill/flutter_quill.dart' as quill;
 Future<void> showDialogScissors({
   required BuildContext context,
   required TextEditingController textEditingController,
-  required quill.QuillController controller,
+  quill.QuillController? controller,
   required VoidCallback onPressed,
 }) {
-  textEditingController.text = controller.document.toPlainText();
 
   return showDialog(
     context: context,
