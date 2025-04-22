@@ -35,6 +35,7 @@ class _CRDTTextEditorState extends State<DocumentPage> {
     super.initState();
     _listenForUpdates();
     init();
+    
   }
 
   bool _speechEnalbled = false;
