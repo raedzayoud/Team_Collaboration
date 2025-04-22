@@ -1,31 +1,23 @@
 import 'dart:convert';
 import 'package:collab_doc/core/utils/function/checkinternet.dart';
 import 'package:collab_doc/feature/document/data/repos/document_repos.dart';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 class DocumentReposImpl implements DocumentRepo {
+  Dio dio = Dio();
   @override
   Future<String> summarizeText(String text) async {
     if (await checkInternet()) {
-      final url = Uri.parse(
-          'https://api.nlpcloud.io/v1/t5-base-en-generate-headline/summarization');
-
-      final headers = {
-        'Authorization': 'Token ad590be6d4cf7fdf8a284718a7071782108d0f5e',
-        'Content-Type': 'application/json',
-      };
-
-      final body = json.encode({
-        'text': text,
-        'length':
-            'short', // You can also use 'long' or 'medium' depending on your preference
-      });
-
-      final response = await http.post(url, headers: headers, body: body);
+      final response = await dio.post(
+        "http://192.168.70.159:5000/summarize", // make sure you define this in your Applink class
+        data: {"text": text},
+        
+      );
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        return data['summary_text']; // Extract the summary from the response
+        final data = response.data;
+        return data['summary']; // Extract the summary from the response
       } else {
         throw Exception("There was an error to summarize Text");
       }
