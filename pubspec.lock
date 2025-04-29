@@ -270,6 +270,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_authgear:
+    dependency: "direct main"
+    description:
+      name: flutter_authgear
+      sha256: "633aaa1d8023e83770b67d8a5cf6baf05bb6f826c490c6a4373eab6ae45856ef"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.9.0"
   flutter_bloc:
     dependency: "direct main"
     description:

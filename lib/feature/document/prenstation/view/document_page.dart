@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:collab_doc/constant.dart';
 import 'package:collab_doc/core/utils/function/snackbar.dart';
 import 'package:collab_doc/feature/document/prenstation/manager/cubit/document_cubit.dart';
 import 'package:collab_doc/feature/document/prenstation/view/modification_history_screen.dart';
@@ -277,19 +278,61 @@ class _CRDTTextEditorState extends State<DocumentPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("CRDT Text Editor"), actions: [
-        ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      ModificationHistoryScreen(documentId: widget.docId),
+      appBar: AppBar(
+        backgroundColor: KPrimayColor,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          "CRDT Text Editor",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: true, // keep it centered
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        ModificationHistoryScreen(documentId: docId),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                backgroundColor: Colors.white.withOpacity(0.15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
                 ),
-              );
-            },
-            child: Text("history"))
-      ]),
+                elevation: 0, // No shadow inside AppBar
+              ),
+              icon: const Icon(Icons.history, size: 18, color: Colors.white),
+              label: const Text(
+                "History",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -310,7 +353,7 @@ class _CRDTTextEditorState extends State<DocumentPage> {
                     );
                   }
                   return TextField(
-                    maxLines: 5,
+                    maxLines: 20,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(12)),
