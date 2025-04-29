@@ -32,7 +32,6 @@ void main() async {
   infoUserSharedPreferences = await SharedPreferences.getInstance();
   await Firebase.initializeApp(
   options: DefaultFirebaseOptions.currentPlatform,
-  // a
 );
   runApp(const MyApp());
   print("Firebase initialized successfully");

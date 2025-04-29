@@ -22,6 +22,7 @@ class _ResponsesState extends State<Responses> {
 
   @override
   Widget build(BuildContext context) {
+    bool isfound = false;
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -50,9 +51,17 @@ class _ResponsesState extends State<Responses> {
 
           if (state is InvitationSuccess) {
             final invitations = state.invitations ?? [];
-            if (invitations.isEmpty) {
+            for (int i = 0; i < invitations.length; i++) {
+              if (invitations[i].status == "PENDING") {
+                isfound = true;
+              }
+            }
+            if (!isfound) {
               return const Center(
-                child: Text("No invitations received."),
+                child: Text("No invitations received",style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600
+                ),),
               );
             }
 
