@@ -212,8 +212,7 @@ class _HomeState extends State<Home> {
                               return Card(
                                 color: Colors.white,
                                 child: ListTile(
-                                  title: Text("Document ${index + 1}"),
-                                  subtitle: Text("ID: ${doc['idDocument']}"),
+                                  title: Text(" ${doc["titre"]} "),
                                   trailing: IconButton(
                                     icon: Icon(Icons.delete, color: Colors.red),
                                     onPressed: () =>
