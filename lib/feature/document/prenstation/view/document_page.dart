@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:collab_doc/constant.dart';
+import 'package:collab_doc/core/class/applink.dart';
 import 'package:collab_doc/core/utils/function/snackbar.dart';
 import 'package:collab_doc/feature/document/prenstation/manager/cubit/document_cubit.dart';
 import 'package:collab_doc/feature/document/prenstation/view/modification_history_screen.dart';
 import 'package:collab_doc/feature/document/prenstation/view/widgets/showdialog_scissors.dart';
 import 'package:collab_doc/main.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +29,7 @@ class _CRDTTextEditorState extends State<DocumentPage> {
   String docId = "";
   final TextEditingController _controller = TextEditingController();
   final QuillController quillController = QuillController.basic();
-
+  bool enable = true;
   List<CRDTItem> items = [];
   int currentIndex = 0;
   StreamSubscription? _itemsSubscription;
@@ -36,6 +38,7 @@ class _CRDTTextEditorState extends State<DocumentPage> {
     super.initState();
     _listenForUpdates();
     init();
+    checkUser();
   }
 
   bool _speechEnalbled = false;
@@ -102,6 +105,70 @@ class _CRDTTextEditorState extends State<DocumentPage> {
         .collection("cursors")
         .doc(idd)
         .delete();
+  }
+
+  void checkUser() async {
+    var idUser = sharedPreferences.getString("id");
+    final dio = Dio();
+    var idDocument = widget.docId;
+    DocumentSnapshot<Map<String, dynamic>> document = await FirebaseFirestore
+        .instance
+        .collection("documents")
+        .doc(idDocument)
+        .get();
+    var idTeam = document.data()!["teamId"];
+
+    print(idTeam);
+
+    final response2 = await dio.get(
+      Applink.apiTeamDetailsById +
+          "${idTeam}", // make sure you define this in your Applink class
+
+      options: Options(
+        headers: {
+          "Authorization":
+              "Bearer ${infoUserSharedPreferences.getString("token")}",
+        },
+      ),
+    );
+    print(response2);
+
+    if (response2.data is Map<String, dynamic>) {
+      var data = response2.data as Map<String, dynamic>;
+
+      if (data['userOwner']['id'] == idUser) {
+        enable = true;
+
+        setState(() {});
+        return;
+      } else {
+        enable = false;
+      }
+    }
+
+    final response = await dio.get(
+      Applink
+          .apiGetUserRoleTeam, // make sure you define this in your Applink class
+      data: {"userId": idUser, "teamId": idTeam},
+      options: Options(
+        headers: {
+          "Authorization":
+              "Bearer ${infoUserSharedPreferences.getString("token")}",
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final data = response.data;
+      if (data == "EDITEUR") {
+        enable = true;
+      } else {
+        enable = false;
+      }
+
+      // Extract the summary from the response
+    }
+    setState(() {});
   }
 
   void _listenForUpdates() {
@@ -272,8 +339,7 @@ class _CRDTTextEditorState extends State<DocumentPage> {
   @override
   Widget build(BuildContext context) {
     docId = widget.docId;
-    print("rewrite here");
-    print("controller index ${currentIndex}");
+
     _controller.selection = TextSelection.collapsed(offset: currentIndex);
 
     return Scaffold(
@@ -352,7 +418,10 @@ class _CRDTTextEditorState extends State<DocumentPage> {
                       child: CircularProgressIndicator(),
                     );
                   }
+
+                  print("this in bloc builder ${enable}");
                   return TextField(
+                    readOnly: !enable,
                     maxLines: 20,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(

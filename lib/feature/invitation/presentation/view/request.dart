@@ -23,7 +23,8 @@ class _RequestState extends State<Request> {
 
   List<Team> allTeams = [];
   Team? selectedTeam;
-
+  String selectedRole = "EDITEUR";
+  final roles = ["EDITEUR", "LECTEUR"];
   @override
   void initState() {
     super.initState();
@@ -99,6 +100,25 @@ class _RequestState extends State<Request> {
                         },
                       ),
                     ),
+                    Center(
+                      child: DropdownButton<String>(
+                        value: selectedRole,
+                        hint: Text('Choisissez un rôle'),
+                        items: roles.map((String role) {
+                          return DropdownMenuItem<String>(
+                            value: role,
+                            child: Text(role),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            if (newValue != null) {
+                              selectedRole = newValue;
+                            }
+                          });
+                        },
+                      ),
+                    ),
                     SizedBox(height: AppResponsive.heigth(context) * .03),
                     CustomTextField(
                       controller: controller,
@@ -144,6 +164,7 @@ class _RequestState extends State<Request> {
                             .sendInvitation(
                           controller.text,
                           selectedTeam!.id,
+                          selectedRole
                         );
                       }
                     },

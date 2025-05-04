@@ -12,10 +12,10 @@ class InvitationCubit extends Cubit<InvitationState> {
 
   InvitationCubit(this.invitationRepo) : super(InvitationInitial());
 
-  void sendInvitation(String emailReciver, int teamid) async {
+  void sendInvitation(String emailReciver, int teamid,String role) async {
     emit(InvitationLoading());
     try {
-      final result = await invitationRepo.sendInvitation(emailReciver, teamid);
+      final result = await invitationRepo.sendInvitation(emailReciver, teamid,role);
       result.fold(
         (failure) =>
             emit(InvitationFailure(errorMessage: failure.errorMessage)),

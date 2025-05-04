@@ -13,17 +13,14 @@ class InvitationRepoImpl implements InvitationRepo {
   Dio dio = Dio();
   @override
   Future<Either<Failure, void>> sendInvitation(
-      String emailReciver, int teamid) async {
+      String emailReciver, int teamid, String role) async {
     if (await checkInternet()) {
       // print(user.toJson());
       var response;
       try {
         response = await dio.post(
           Applink.apiInvitation,
-          data: {
-            "emailReceiver": emailReciver,
-            "teamId": teamid,
-          },
+          data: {"emailReceiver": emailReciver, "teamId": teamid, "role": role},
           options: Options(
             headers: {
               "Authorization":
@@ -130,13 +127,13 @@ class InvitationRepoImpl implements InvitationRepo {
   }
 
   @override
-  Future<Either<Failure, Team>> getTeamDetailsById(int idTeam)async {
-  if (await checkInternet()) {
+  Future<Either<Failure, Team>> getTeamDetailsById(int idTeam) async {
+    if (await checkInternet()) {
       // print(user.toJson());
       var response;
       try {
         response = await dio.get(
-          Applink.apiTeamDetailsById+idTeam.toString(),
+          Applink.apiTeamDetailsById + idTeam.toString(),
           options: Options(
             headers: {
               "Authorization":
@@ -154,16 +151,17 @@ class InvitationRepoImpl implements InvitationRepo {
       }
     } else {
       return Left(ServeurFailure(errorsMessage: "No Internet Connection"));
-    }}
+    }
+  }
 
   @override
-  Future<Either<Failure, UserDetails>> getUserDetailsById(int idUser) async{
+  Future<Either<Failure, UserDetails>> getUserDetailsById(int idUser) async {
     if (await checkInternet()) {
       // print(user.toJson());
       var response;
       try {
         response = await dio.get(
-          Applink.apiUserDetailsById+idUser.toString(),
+          Applink.apiUserDetailsById + idUser.toString(),
           options: Options(
             headers: {
               "Authorization":

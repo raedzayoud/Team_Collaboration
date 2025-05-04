@@ -83,17 +83,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _deleteDocument(String id) async {
-    List<String> savedDocs =
-        sharedPreferences.getStringList('saved_documents') ?? [];
-
-    // Remove the document with matching ID
-    savedDocs.removeWhere((doc) {
-      final decodedDoc = jsonDecode(doc);
-      return decodedDoc['id'] == id;
-    });
-
-    await sharedPreferences.setStringList('saved_documents', savedDocs);
-    _loadDocuments(); // Refresh UI
+    await FirebaseFirestore.instance.collection("documents").doc(id).delete();
+    setState(() {}); // Refresh UI
   }
 
   void _openDocument(String content) {
