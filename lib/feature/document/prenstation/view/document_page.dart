@@ -160,10 +160,10 @@ class _CRDTTextEditorState extends State<DocumentPage> {
 
     if (response.statusCode == 200) {
       final data = response.data;
-      if (data == "EDITEUR") {
-        enable = true;
-      } else {
+      if (data == "LECTEUR" || data == null) {
         enable = false;
+      } else {
+        enable = true;
       }
 
       // Extract the summary from the response
@@ -421,7 +421,7 @@ class _CRDTTextEditorState extends State<DocumentPage> {
 
                   print("this in bloc builder ${enable}");
                   return TextField(
-                    readOnly: !enable,
+                    readOnly: false /*!enable*/,
                     maxLines: 20,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(
